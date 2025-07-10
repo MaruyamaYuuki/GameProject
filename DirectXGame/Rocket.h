@@ -11,6 +11,8 @@ public:
 
 	void Draw();
 
+	void Firing();
+
 private:
 	WorldTransformEx worldTrandform_;
 
@@ -18,5 +20,11 @@ private:
 
 	KamataEngine::Input* input_ = nullptr;
 
-	bool testFlag = false;
+	bool testFlag_ = false;
+	bool isFiring_ = false;
+
+	float screwCount_ = 0;   // ネジを巻いた回数
+
+	float maxFiringDistance_ = 9999; // 最大飛距離
+	float firingDistance_ = 0;       // 飛距離
 };
