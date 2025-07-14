@@ -2,10 +2,12 @@
 #include "KamataEngine.h"
 #include "WorldTransformEx.h"
 
+class Screw;
+class Timer;
 class Rocket {
 public:
 
-	void Initialize(KamataEngine::Model* model, KamataEngine::Input* input);
+	void Initialize(KamataEngine::Model* model, KamataEngine::Input* input, Screw* screw, Timer* timer);
 
 	void Update();
 
@@ -27,4 +29,7 @@ private:
 
 	float maxFiringDistance_ = 9999; // 最大飛距離
 	float firingDistance_ = 0;       // 飛距離
+
+	Screw* screw_ = nullptr;
+	Timer* timer_ = nullptr;
 };

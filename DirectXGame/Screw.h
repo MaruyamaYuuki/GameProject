@@ -2,9 +2,11 @@
 #include "KamataEngine.h"
 #include "WorldTransformEx.h"
 
+class Timer;
 class Screw {
-	
-	void Initialize(KamataEngine::Model* model, KamataEngine::Input* input);
+public:
+
+	void Initialize(KamataEngine::Model* model, KamataEngine::Input* input, Timer* timer);
 
 	void Update();
 
@@ -12,7 +14,7 @@ class Screw {
 
 	void ScrewWinding();
 
-	const float GetEnergy() { return energy_; }
+	float GetEnergy() { return energy_; }
 
 private:
 	XINPUT_STATE state, preState;
@@ -26,4 +28,6 @@ private:
 	float energy_ = 0;
 
 	bool testFlag = false;
+
+	Timer* timer_ = nullptr;
 };
