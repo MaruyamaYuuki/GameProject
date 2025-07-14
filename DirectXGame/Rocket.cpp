@@ -16,7 +16,7 @@ void Rocket::Initialize(Model* model, Input* input) {
 void Rocket::Update() { 
 	Firing();
 
-	worldTrandform_.UpDateMatrix(); 
+	worldTrandform_.UpdateMatrix(); 
 }
 
 void Rocket::Draw() {}

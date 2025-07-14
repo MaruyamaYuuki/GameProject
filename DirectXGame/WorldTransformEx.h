@@ -5,7 +5,7 @@ class WorldTransformEx :
 
 public:
 	// Affine変換行列の生成と定数バッファへの転送を行う
-	void UpDateMatrix();
+	void UpdateMatrix();
 
 	// Affine変換行列の生成
 	KamataEngine::Matrix4x4 MakeAffinMatrix();
