@@ -10,7 +10,7 @@ public:
 
 	void Update();
 
-	void Draw();
+	void Draw(KamataEngine::Camera& camera);
 
 	void ScrewWinding();
 
@@ -19,7 +19,7 @@ public:
 private:
 	XINPUT_STATE state, preState;
 
-	WorldTransformEx worldTransfor_;
+	WorldTransformEx worldTransform_;
 
 	KamataEngine::Input* input_ = nullptr;
 

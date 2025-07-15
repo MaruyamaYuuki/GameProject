@@ -11,26 +11,33 @@ void Screw::Initialize(Model* model, Input* input, Timer* timer) {
 	assert(input);
 	input_ = input;
 	assert(timer);
-	timer_ = timer;
+	this->timer_ = timer;
 
-	worldTransfor_.Initialize();
+	worldTransform_.Initialize();
+	worldTransform_.translation_.x += 10;
+
+
 }
 
 void Screw::Update() {
-	input_->GetJoystickState(0, state);
-	input_->GetJoystickStatePrevious(0, preState);
+
+    input_->GetJoystickState(0, state);
+    input_->GetJoystickStatePrevious(0, preState);
 
 	ScrewWinding();
 
 	DebugText::GetInstance()->ConsolePrintf("Enegy : %f\n", energy_);
 
-	worldTransfor_.UpdateMatrix();
+	worldTransform_.UpdateMatrix();
 }
 
-void Screw::Draw() {}
+void Screw::Draw(Camera& camera) {
+	model_->Draw(worldTransform_, camera); 
+}
 
 void Screw::ScrewWinding() {
-	if (testFlag) {
+	if (timer_->IsScrewStart()) {
+
 		if (input_->TriggerKey(DIK_SPACE) || 
 			(state.Gamepad.wButtons & XINPUT_GAMEPAD_A) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_A)) {
 			energy_++;

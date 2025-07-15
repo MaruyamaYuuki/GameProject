@@ -11,12 +11,12 @@ public:
 
 	void Update();
 
-	void Draw();
+	void Draw(KamataEngine::Camera& camera);
 
 	void Firing();
 
 private:
-	WorldTransformEx worldTrandform_;
+	WorldTransformEx worldTransform_;
 
 	KamataEngine::Model* model_ = nullptr;
 

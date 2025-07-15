@@ -1,4 +1,5 @@
 #pragma once
+
 class Timer {
 public:
 	void Initialize();
@@ -21,9 +22,9 @@ private:
 
 	const float deltaTime = 1.0f / 60.0f;
 
-	float screwTime = 600.0f; // 10秒
+	float screwTime = 10.0f; // 10秒
 
-	float firingTime = 180.0f; // 3秒
+	float firingTime = 3.0f; // 3秒
 
 	bool isScrewStart = false;
 
