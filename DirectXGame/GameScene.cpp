@@ -1,5 +1,6 @@
 #include "GameScene.h"
 #include "Rocket.h"
+#include <cfloat>
 
 using namespace KamataEngine;
 
@@ -10,6 +11,7 @@ GameScene::~GameScene() {
 	delete screw_;
 	delete rocket_;
 	delete model_;
+	delete cameraController_;
 }
 
 void GameScene::Initialize() {
@@ -20,14 +22,23 @@ void GameScene::Initialize() {
 
 	model_ = Model::Create();
 
+
+	// タイマーの初期化・生成
 	timer_ = new Timer();
 	timer_->Initialize();
-
+	// ネジの初期化・生成
 	screw_ = new Screw();
 	screw_->Initialize(model_, input, timer_);
-
+	// ロケットの初期化・生成
 	rocket_ = new Rocket();
 	rocket_->Initialize(model_, input, screw_, timer_);
+	// カメラコントローラの初期化・生成
+	cameraController_ = new CameraController(); 
+	cameraController_->Initialize();            
+	cameraController_->SetTarget(rocket_);      // 追従対象をセット
+	cameraController_->Reset();                 // リセット(瞬間合わせ)
+	CameraController::Rect cameraArea = {0.0f, 1280.0f, -FLT_MAX, 720.0f};
+	cameraController_->SetMoveableArea(cameraArea);
 }
 
 void GameScene::Update() {
@@ -45,6 +56,13 @@ void GameScene::Update() {
 
 	screw_->Update();
 	rocket_->Update();
+
+	cameraController_->Update();
+
+	const Camera& cameraViewProjection = cameraController_->GetCamera();
+	camera_.matView = cameraViewProjection.matView;
+	camera_.matProjection = cameraViewProjection.matProjection;
+	camera_.TransferMatrix();
 }
 
 void GameScene::Draw() {

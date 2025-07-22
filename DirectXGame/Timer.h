@@ -2,6 +2,13 @@
 
 class Timer {
 public:
+	enum class FiringState {
+		Standby,
+		ReadyToFire,
+		Firing,
+	};
+
+public:
 	void Initialize();
 
 	void Update();
@@ -14,6 +21,8 @@ public:
 
 	void Reset();
 
+	FiringState GetFiringState() const { return firingState_; }
+
 	bool IsScrewStart() { return isScrewStart; }
 
 	bool IsFiring() { return isFiring; }
@@ -25,6 +34,8 @@ private:
 	float screwTime = 10.0f; // 10秒
 
 	float firingTime = 3.0f; // 3秒
+
+	FiringState firingState_ = FiringState::Standby;
 
 	bool isScrewStart = false;
 

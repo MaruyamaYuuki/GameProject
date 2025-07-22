@@ -5,6 +5,12 @@
 class Screw;
 class Timer;
 class Rocket {
+	enum class FiringState { 
+		Standby, 
+		ReadyToFire, 
+		Firing };
+
+
 public:
 
 	void Initialize(KamataEngine::Model* model, KamataEngine::Input* input, Screw* screw, Timer* timer);
@@ -15,12 +21,18 @@ public:
 
 	void Firing();
 
+	const WorldTransformEx& GetWorldTransform() const { return worldTransform_; }
+
+	const KamataEngine::Vector3& GetVelocity() const { return velocity_; }
+
 private:
 	WorldTransformEx worldTransform_;
 
 	KamataEngine::Model* model_ = nullptr;
 
 	KamataEngine::Input* input_ = nullptr;
+
+	KamataEngine::Vector3 velocity_ = {};
 
 	bool testFlag_ = false;
 	bool isFiring_ = false;
@@ -32,4 +44,6 @@ private:
 
 	Screw* screw_ = nullptr;
 	Timer* timer_ = nullptr;
+
+	bool hit = false;
 };

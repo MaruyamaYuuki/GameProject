@@ -29,10 +29,12 @@ void Timer::ScrewTimer(bool isFlag) {
 }
 
 void Timer::FiringCountTimer(bool isFlag) {
-	if (firingTime >= 0.0f && isFlag) {
+	if (firingState_ == FiringState::Standby && isFlag) {
 		firingTime -= deltaTime;
-	} else if (firingTime <= 0.0f) {
-		isFiring = true;
+
+		if (firingTime <= 0.0f) {
+			firingState_ = FiringState::ReadyToFire;
+		}
 	}
 }
 
@@ -41,6 +43,8 @@ void Timer::Reset() {
 	screwTime = 600.0f; // 10秒
 
 	firingTime = 180.0f; // 3秒
+
+	firingState_ = FiringState::Standby;
 
 	isScrewStart = false;
 

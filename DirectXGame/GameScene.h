@@ -3,6 +3,7 @@
 #include "Timer.h"
 #include "Screw.h"
 #include "Rocket.h"
+#include "CameraController.h"
 
 class GameScene {
 public:
@@ -27,6 +28,7 @@ private:
 	Timer* timer_ = nullptr;
 	Screw* screw_ = nullptr;
 	Rocket* rocket_ = nullptr;
+	CameraController* cameraController_ = nullptr;
 
 	bool screwFlag = false;
 	bool countFlag = false;
