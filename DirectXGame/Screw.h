@@ -32,5 +32,5 @@ private:
 	Timer* timer_ = nullptr;
 
 	float targetRotationX_ = 0.0f; // 回転目標角（ラジアン）
-	float rotationSpeed_ = 5.0f;   // 回転スピード（ラジアン/秒）
+	float rotationSpeed_ = 15.0f;   // 回転スピード（ラジアン/秒）
 };
