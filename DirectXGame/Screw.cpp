@@ -7,13 +7,13 @@
 
 using namespace KamataEngine;
 
-void Screw::Initialize(Model* model, Input* input, Timer* timer) {
+void Screw::Initialize(Model* model, Input* input) {
 	assert(model);
 	model_ = model;
 	assert(input);
 	input_ = input;
-	assert(timer);
-	this->timer_ = timer;
+
+	timer_->Initialize();
 
 	worldTransform_.Initialize();
 	worldTransform_.translation_.x += 10;

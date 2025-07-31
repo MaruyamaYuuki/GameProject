@@ -18,6 +18,8 @@ public:
 
 	void Draw();
 
+	bool IsFinished() const { return isFinished_; }
+
 private:
 	KamataEngine::DirectXCommon* dxCommon = nullptr;
 	KamataEngine::Input* input = nullptr;
@@ -32,4 +34,6 @@ private:
 
 	bool screwFlag = false;
 	bool countFlag = false;
+
+	bool isFinished_ = false;
 };

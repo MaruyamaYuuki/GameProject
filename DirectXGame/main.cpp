@@ -1,9 +1,24 @@
 #include <Windows.h>
 #include "KamataEngine.h"
+#include "TitleScene.h"
 #include "GameScene.h"
 
-
 using namespace KamataEngine;
+
+GameScene* gameScene = nullptr;
+TitleScene* titleScene = nullptr;
+
+enum class Scene {
+	kUnkown = 0,
+
+	kTitle,
+	kGame,
+};
+Scene scene = Scene::kUnkown;
+
+void ChangeScene();
+void UpdateScene();
+void DrawScene();
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
@@ -13,8 +28,10 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	// DirectXCommonインスタンス
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 
-	GameScene* gameScene = new GameScene();
-	gameScene->Initialize();
+	titleScene = new TitleScene();
+	titleScene->Initialize();
+
+	scene = Scene::kTitle;
 
 	// メインループ
 	while (true) {
@@ -23,22 +40,72 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 			break;
 		}
 
-		gameScene->Update();
+		UpdateScene();
+		ChangeScene();
 
 		// 描画処理
 		dxCommon->PreDraw();
 
-		gameScene->Draw();
+		DrawScene();
 
 		// 描画終了
 		dxCommon->PostDraw();
 	}
 
+	delete titleScene;
 	delete gameScene;
-	gameScene = nullptr;
 
 	// エンジンの終了処理
 	KamataEngine::Finalize();
 	
 	return 0;
+}
+
+void ChangeScene() {
+	switch (scene) {
+	case Scene::kTitle:
+		if (titleScene->IsFinished()) {
+			scene = Scene::kGame;
+
+			delete titleScene;
+			titleScene = nullptr;
+
+			gameScene = new GameScene();
+			gameScene->Initialize();
+		}
+		break;
+	case Scene::kGame:
+		if (gameScene->IsFinished()) {
+			scene = Scene::kTitle;
+
+			delete gameScene;
+			gameScene = nullptr;
+
+			titleScene = new TitleScene();
+			titleScene->Initialize();
+		}
+		break;
+	}
+}
+
+void UpdateScene() {
+	switch (scene) {
+	case Scene::kTitle:
+		titleScene->Update();
+		break;
+	case Scene::kGame:
+		gameScene->Update();
+		break;
+	}
+}
+
+void DrawScene() {
+	switch (scene) {
+	case Scene::kTitle:
+		titleScene->Draw();
+		break;
+	case Scene::kGame:
+		gameScene->Draw();
+		break;
+	}
 }

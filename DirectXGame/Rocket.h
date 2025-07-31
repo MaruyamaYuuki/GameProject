@@ -2,6 +2,7 @@
 #include "KamataEngine.h"
 #include "WorldTransformEx.h"
 
+
 class Screw;
 class Timer;
 class Rocket {
@@ -10,10 +11,9 @@ class Rocket {
 		ReadyToFire, 
 		Firing };
 
-
 public:
 
-	void Initialize(KamataEngine::Model* model, KamataEngine::Input* input, Screw* screw, Timer* timer);
+	void Initialize(KamataEngine::Model* model, KamataEngine::Input* input, Screw* screw);
 
 	void Update();
 

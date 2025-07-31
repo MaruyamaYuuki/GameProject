@@ -8,15 +8,15 @@
 using namespace KamataEngine;
 using namespace KamataEngine::MathUtility;
 
-void Rocket::Initialize(Model* model, Input* input, Screw* screw, Timer* timer) {
+void Rocket::Initialize(Model* model, Input* input, Screw* screw) {
 	assert(model);
 	model_ = model;
 	assert(input);
 	input_ = input;
 	assert(screw);
 	this->screw_ = screw;
-	assert(timer);
-	this->timer_ = timer;
+
+	timer_->Initialize();
 
 	worldTransform_.Initialize();
 }

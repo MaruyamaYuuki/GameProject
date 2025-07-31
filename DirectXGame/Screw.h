@@ -6,7 +6,7 @@ class Timer;
 class Screw {
 public:
 
-	void Initialize(KamataEngine::Model* model, KamataEngine::Input* input, Timer* timer);
+	void Initialize(KamataEngine::Model* model, KamataEngine::Input* input);
 
 	void Update();
 

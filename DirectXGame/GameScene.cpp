@@ -28,10 +28,10 @@ void GameScene::Initialize() {
 	timer_->Initialize();
 	// ネジの初期化・生成
 	screw_ = new Screw();
-	screw_->Initialize(model_, input, timer_);
+	screw_->Initialize(model_, input);
 	// ロケットの初期化・生成
 	rocket_ = new Rocket();
-	rocket_->Initialize(model_, input, screw_, timer_);
+	rocket_->Initialize(model_, input, screw_);
 	// カメラコントローラの初期化・生成
 	cameraController_ = new CameraController(); 
 	cameraController_->Initialize();            
