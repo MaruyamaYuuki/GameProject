@@ -11,6 +11,8 @@ GameScene::~GameScene() {
 	delete screw_;
 	delete rocket_;
 	delete model_;
+	delete modelRocket_;
+	delete modelScrew_;
 	delete cameraController_;
 }
 
@@ -21,17 +23,18 @@ void GameScene::Initialize() {
 	camera_.Initialize();
 
 	model_ = Model::Create();
-
+	modelRocket_ = Model::CreateFromOBJ("rocket", true);
+	modelScrew_ = Model::CreateFromOBJ("screw", true);
 
 	// タイマーの初期化・生成
 	timer_ = new Timer();
 	timer_->Initialize();
 	// ネジの初期化・生成
 	screw_ = new Screw();
-	screw_->Initialize(model_, input);
+	screw_->Initialize(modelScrew_, input,timer_);
 	// ロケットの初期化・生成
 	rocket_ = new Rocket();
-	rocket_->Initialize(model_, input, screw_);
+	rocket_->Initialize(modelRocket_, input, screw_, timer_);
 	// カメラコントローラの初期化・生成
 	cameraController_ = new CameraController(); 
 	cameraController_->Initialize();            

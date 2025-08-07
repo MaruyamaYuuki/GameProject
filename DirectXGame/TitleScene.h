@@ -26,11 +26,6 @@ private:
 
 	KamataEngine::Camera camera_;
 
-	KamataEngine::Model* model_ = nullptr;
-
-	Screw* screw_ = nullptr;
-	Rocket* rocket_ = nullptr;
-
 
 	bool isFinished_ = false;
 };

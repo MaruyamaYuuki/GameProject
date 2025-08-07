@@ -8,15 +8,15 @@
 using namespace KamataEngine;
 using namespace KamataEngine::MathUtility;
 
-void Rocket::Initialize(Model* model, Input* input, Screw* screw) {
+void Rocket::Initialize(Model* model, Input* input, Screw* screw, Timer* timer) {
 	assert(model);
 	model_ = model;
 	assert(input);
 	input_ = input;
 	assert(screw);
 	this->screw_ = screw;
-
-	timer_->Initialize();
+	assert(timer);
+	this->timer_ = timer;
 
 	worldTransform_.Initialize();
 }
@@ -34,6 +34,15 @@ void Rocket::Update() {
 void Rocket::Draw(Camera& camera) { 
 	model_->Draw(worldTransform_, camera); 
 }
+
+void Rocket::InitializeOnlyModel(KamataEngine::Model* model) {
+	assert(model);
+	model_ = model;
+
+	worldTransform_.Initialize();
+}
+
+void Rocket::UpdateOnlyModel() { worldTransform_.UpdateMatrix(); }
 
 void Rocket::Firing() {
 	screwCount_ = screw_->GetEnergy();
@@ -55,8 +64,6 @@ void Rocket::Firing() {
 		progress = std::clamp(progress, 0.0f, 1.0f);
 
 		// 放物線的な動きを再現：最初は加速→最後に減速
-		// v = vMax * sin((1 - progress) * π)
-		const float vMax = 10.0f; // 最大速度
 		velocity_.y = vMax * std::sin((1.0f - progress) * 3.14159f);
 
 		// 上昇

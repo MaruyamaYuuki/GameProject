@@ -26,6 +26,8 @@ private:
 	KamataEngine::Camera camera_;
 
 	KamataEngine::Model* model_ = nullptr;
+	KamataEngine::Model* modelRocket_ = nullptr;
+	KamataEngine::Model* modelScrew_ = nullptr;
 
 	Timer* timer_ = nullptr;
 	Screw* screw_ = nullptr;

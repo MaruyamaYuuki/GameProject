@@ -13,11 +13,15 @@ class Rocket {
 
 public:
 
-	void Initialize(KamataEngine::Model* model, KamataEngine::Input* input, Screw* screw);
+	void Initialize(KamataEngine::Model* model, KamataEngine::Input* input, Screw* screw , Timer* timer);
 
 	void Update();
 
 	void Draw(KamataEngine::Camera& camera);
+
+	void InitializeOnlyModel(KamataEngine::Model* model);
+
+	void UpdateOnlyModel();
 
 	void Firing();
 
@@ -46,4 +50,8 @@ private:
 	Timer* timer_ = nullptr;
 
 	bool hit = false;
+
+	// 初速に下限を設ける（例：minSpeed = 2.0f）
+	const float minSpeed = 2.0f;
+	const float vMax = 10.0f;
 };

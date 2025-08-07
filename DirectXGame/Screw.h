@@ -4,13 +4,22 @@
 
 class Timer;
 class Screw {
+	enum class ScrewType {
+		Button,
+		Joystick,
+	};
+
 public:
 
-	void Initialize(KamataEngine::Model* model, KamataEngine::Input* input);
+	void Initialize(KamataEngine::Model* model, KamataEngine::Input* input, Timer* timer);
 
 	void Update();
 
 	void Draw(KamataEngine::Camera& camera);
+
+	void InitializeOnlyModel(KamataEngine::Model* model);
+
+	void UpdateOnlyModel();
 
 	void ScrewWinding();
 
@@ -33,4 +42,9 @@ private:
 
 	float targetRotationX_ = 0.0f; // 回転目標角（ラジアン）
 	float rotationSpeed_ = 15.0f;   // 回転スピード（ラジアン/秒）
+
+	float previousStickAngle_ = 0.0f; // 前回のスティック角度
+	float accumulatedAngle_ = 0.0f;   // 合計回転数
+
+	ScrewType screwType_ = ScrewType::Button;
 };

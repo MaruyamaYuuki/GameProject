@@ -29,8 +29,8 @@ void CameraController::Update() {
 	// 行動範囲制御
 	camera_.translation_.x = std::max(camera_.translation_.x, moveableArea_.left);
 	camera_.translation_.x = std::min(camera_.translation_.x, moveableArea_.right);
-	camera_.translation_.y = std::max(camera_.translation_.y, moveableArea_.bottom);
-	camera_.translation_.y = std::min(camera_.translation_.y, moveableArea_.top);
+	//camera_.translation_.y = std::max(camera_.translation_.y, moveableArea_.bottom);
+	//camera_.translation_.y = std::min(camera_.translation_.y, moveableArea_.top);
 
 	// 行列を更新する
 	camera_.UpdateMatrix();

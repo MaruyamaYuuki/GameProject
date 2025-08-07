@@ -11,15 +11,7 @@ void TitleScene::Initialize() {
 	input = Input::GetInstance();
 
 	camera_.Initialize();
-	camera_.translation_.y -= 10.0f;
 
-	model_ = Model::Create();
-
-	screw_ = new Screw();
-	screw_->Initialize(model_, input);
-
-	rocket_ = new Rocket();
-	rocket_->Initialize(model_, input, screw_);
 }
 
 void TitleScene::Update() {
@@ -41,10 +33,6 @@ void TitleScene::Draw() {
 
 	// 3Dオブジェクト描画前処理
 	Model::PreDraw(dxCommon->GetCommandList());
-
-	screw_->Draw(camera_);
-
-	rocket_->Draw(camera_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
