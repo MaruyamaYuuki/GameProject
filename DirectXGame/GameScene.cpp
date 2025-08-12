@@ -7,12 +7,17 @@ using namespace KamataEngine;
 GameScene::GameScene() {}
 
 GameScene::~GameScene() {
-	delete timer_;
-	delete screw_;
-	delete rocket_;
 	delete model_;
 	delete modelRocket_;
 	delete modelScrew_;
+	delete modelSkydome_;
+	delete modelUniversedome_;
+
+	delete timer_;
+	delete screw_;
+	delete rocket_;
+	delete skydome_;
+	delete universedome_;
 	delete cameraController_;
 }
 
@@ -20,11 +25,14 @@ void GameScene::Initialize() {
 	dxCommon = DirectXCommon::GetInstance();
 	input = Input::GetInstance();
 
+	camera_.farZ = 20000.0f;
 	camera_.Initialize();
 
 	model_ = Model::Create();
 	modelRocket_ = Model::CreateFromOBJ("rocket", true);
 	modelScrew_ = Model::CreateFromOBJ("screw", true);
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	modelUniversedome_ = Model::CreateFromOBJ("universedome", true);
 
 	// タイマーの初期化・生成
 	timer_ = new Timer();
@@ -35,6 +43,11 @@ void GameScene::Initialize() {
 	// ロケットの初期化・生成
 	rocket_ = new Rocket();
 	rocket_->Initialize(modelRocket_, input, screw_, timer_);
+	// 天球の初期化・生成
+	skydome_ = new Skydome();
+	skydome_->Initialize(modelSkydome_, 6000.0f, &camera_);
+	universedome_ = new Skydome();
+	universedome_->Initialize(modelUniversedome_, 15000.0f, &camera_);
 	// カメラコントローラの初期化・生成
 	cameraController_ = new CameraController(); 
 	cameraController_->Initialize();            
@@ -51,6 +64,9 @@ void GameScene::Update() {
 	if (input->TriggerKey(DIK_C)) {
 		countFlag = true;
 	}
+
+	skydome_->Update();
+	universedome_->Update();
 
 	timer_->Update();
 
@@ -79,6 +95,9 @@ void GameScene::Draw() {
 
 	// 3Dオブジェクト描画前処理
 	Model::PreDraw(dxCommon->GetCommandList());
+
+	skydome_->Draw();
+	universedome_->Draw();
 
 	screw_->Draw(camera_);
 

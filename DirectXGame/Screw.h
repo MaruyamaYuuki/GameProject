@@ -34,7 +34,7 @@ private:
 
 	KamataEngine::Model* model_ = nullptr;
 
-	float energy_ = 0;
+	float energy_ = 999;
 
 	bool testFlag = false;
 

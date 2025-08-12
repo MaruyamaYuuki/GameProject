@@ -51,7 +51,4 @@ private:
 
 	bool hit = false;
 
-	// 初速に下限を設ける（例：minSpeed = 2.0f）
-	const float minSpeed = 2.0f;
-	const float vMax = 10.0f;
 };

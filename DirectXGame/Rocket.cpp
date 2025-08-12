@@ -47,9 +47,13 @@ void Rocket::UpdateOnlyModel() { worldTransform_.UpdateMatrix(); }
 void Rocket::Firing() {
 	screwCount_ = screw_->GetEnergy();
 
+	// 定数（調整用）
+	const float minSpeed = 0.1f; // 初速の下限
+	const float vMax = 3.0f;    // 最大速度
+	const float distancePerScrew = 80.0f;
+
 	if (timer_->GetFiringState() == Timer::FiringState::ReadyToFire) {
 		// ネジを巻いた回数に応じて距離を決定
-		const float distancePerScrew = 80.0f;
 		firingDistance_ = std::min(screwCount_ * distancePerScrew, maxFiringDistance_);
 
 		isFiring_ = true;
@@ -57,14 +61,14 @@ void Rocket::Firing() {
 
 		timer_->Reset();
 	}
-	if (isFiring_) {
 
-		// 高度に応じて加減速させるため、割合（進行率）を計算
+	if (isFiring_) {
+		// 高度に応じた進行率
 		float progress = worldTransform_.translation_.y / firingDistance_;
 		progress = std::clamp(progress, 0.0f, 1.0f);
 
-		// 放物線的な動きを再現：最初は加速→最後に減速
-		velocity_.y = vMax * std::sin((1.0f - progress) * 3.14159f);
+		// 最小速度保証付きの放物線的な動き
+		velocity_.y = minSpeed + (vMax - minSpeed) * std::sin((1.0f - progress) * 3.14159f);
 
 		// 上昇
 		worldTransform_.translation_.y += velocity_.y;

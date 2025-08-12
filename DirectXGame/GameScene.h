@@ -4,6 +4,7 @@
 #include "Screw.h"
 #include "Rocket.h"
 #include "CameraController.h"
+#include "Skydome.h"
 
 class GameScene {
 public:
@@ -28,11 +29,16 @@ private:
 	KamataEngine::Model* model_ = nullptr;
 	KamataEngine::Model* modelRocket_ = nullptr;
 	KamataEngine::Model* modelScrew_ = nullptr;
+	KamataEngine::Model* modelSkydome_ = nullptr;
+	KamataEngine::Model* modelUniversedome_ = nullptr;
 
 	Timer* timer_ = nullptr;
 	Screw* screw_ = nullptr;
 	Rocket* rocket_ = nullptr;
 	CameraController* cameraController_ = nullptr;
+
+	Skydome* skydome_ = nullptr;
+	Skydome* universedome_ = nullptr;
 
 	bool screwFlag = false;
 	bool countFlag = false;
