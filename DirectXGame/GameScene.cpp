@@ -19,13 +19,15 @@ GameScene::~GameScene() {
 	delete skydome_;
 	delete universedome_;
 	delete cameraController_;
+	delete debugCamera_;
 }
 
 void GameScene::Initialize() {
 	dxCommon = DirectXCommon::GetInstance();
 	input = Input::GetInstance();
 
-	camera_.farZ = 20000.0f;
+	//camera_.nearZ = 0.05f;
+	camera_.farZ = 50000.0f;
 	camera_.Initialize();
 
 	model_ = Model::Create();
@@ -44,10 +46,10 @@ void GameScene::Initialize() {
 	rocket_ = new Rocket();
 	rocket_->Initialize(modelRocket_, input, screw_, timer_);
 	// 天球の初期化・生成
-	skydome_ = new Skydome();
-	skydome_->Initialize(modelSkydome_, 6000.0f, &camera_);
 	universedome_ = new Skydome();
-	universedome_->Initialize(modelUniversedome_, 15000.0f, &camera_);
+	universedome_->Initialize(modelUniversedome_, universeSize_, &camera_);
+	skydome_ = new Skydome();
+	skydome_->Initialize(modelSkydome_, skySize_, &camera_);
 	// カメラコントローラの初期化・生成
 	cameraController_ = new CameraController(); 
 	cameraController_->Initialize();            
@@ -55,6 +57,8 @@ void GameScene::Initialize() {
 	cameraController_->Reset();                 // リセット(瞬間合わせ)
 	CameraController::Rect cameraArea = {0.0f, 1280.0f, -FLT_MAX, 720.0f};
 	cameraController_->SetMoveableArea(cameraArea);
+
+	debugCamera_ = new DebugCamera(1280, 720);
 }
 
 void GameScene::Update() {
@@ -65,8 +69,10 @@ void GameScene::Update() {
 		countFlag = true;
 	}
 
-	skydome_->Update();
 	universedome_->Update();
+	skydome_->Update();
+	skydome_->UpdateAlphaByDistance(rocket_->GetWorldTransform().translation_);
+
 
 	timer_->Update();
 
@@ -78,10 +84,36 @@ void GameScene::Update() {
 
 	cameraController_->Update();
 
-	const Camera& cameraViewProjection = cameraController_->GetCamera();
+	/*	const Camera& cameraViewProjection = cameraController_->GetCamera();
 	camera_.matView = cameraViewProjection.matView;
 	camera_.matProjection = cameraViewProjection.matProjection;
-	camera_.TransferMatrix();
+	camera_.TransferMatrix();*/
+
+
+	    	// カメラの処理
+	if (isDebugCameraActive_) {
+		// デバッグカメラの更新
+		debugCamera_->Update();
+		camera_.matView = debugCamera_->GetCamera().matView;
+		camera_.matProjection = debugCamera_->GetCamera().matProjection;
+		// ビュープロジェクション行列の転送
+		camera_.TransferMatrix();
+	} else {
+		// ビュープロジェクション行列の更新と転送
+		const Camera& cameraViewProjection = cameraController_->GetCamera();
+		camera_.matView = cameraViewProjection.matView;
+		camera_.matProjection = cameraViewProjection.matProjection;
+		camera_.TransferMatrix();
+	}
+
+	#ifdef _DEBUG
+	if (input->TriggerKey(DIK_RETURN)) {
+		if (!isDebugCameraActive_)
+			isDebugCameraActive_ = true;
+		else
+			isDebugCameraActive_ = false;
+	}
+    #endif
 }
 
 void GameScene::Draw() {
@@ -96,8 +128,9 @@ void GameScene::Draw() {
 	// 3Dオブジェクト描画前処理
 	Model::PreDraw(dxCommon->GetCommandList());
 
-	skydome_->Draw();
 	universedome_->Draw();
+	skydome_->Draw();
+
 
 	screw_->Draw(camera_);
 

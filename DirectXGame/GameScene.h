@@ -44,4 +44,10 @@ private:
 	bool countFlag = false;
 
 	bool isFinished_ = false;
+
+	bool isDebugCameraActive_ = false;
+	KamataEngine::DebugCamera* debugCamera_ = nullptr;
+
+	KamataEngine::Vector3 skySize_ = {500.0f, 500.0f, 500.0f};
+	KamataEngine::Vector3 universeSize_{1000.0f, 1000.0f, 600.0f};
 };
