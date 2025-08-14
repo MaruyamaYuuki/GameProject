@@ -48,6 +48,6 @@ private:
 	bool isDebugCameraActive_ = false;
 	KamataEngine::DebugCamera* debugCamera_ = nullptr;
 
-	KamataEngine::Vector3 skySize_ = {500.0f, 500.0f, 500.0f};
-	KamataEngine::Vector3 universeSize_{1000.0f, 1000.0f, 600.0f};
+	KamataEngine::Vector3 skySize_ = {900.0f, 900.0f, 900.0f};
+	KamataEngine::Vector3 universeSize_{11000.0f, 11000.0f, 950.0f};
 };

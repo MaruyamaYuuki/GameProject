@@ -49,7 +49,7 @@ void Rocket::Firing() {
 
 	// 定数（調整用）
 	const float minSpeed = 0.1f; // 初速の下限
-	const float vMax = 3.0f;    // 最大速度
+	const float vMax = 3.5f;    // 最大速度
 	const float distancePerScrew = 80.0f;
 
 	if (timer_->GetFiringState() == Timer::FiringState::ReadyToFire) {
@@ -77,6 +77,12 @@ void Rocket::Firing() {
 		if (worldTransform_.translation_.y >= firingDistance_) {
 			worldTransform_.translation_.y = firingDistance_;
 			isFiring_ = false;
+		}
+
+		if (input_->PushKey(DIK_A)) {
+			worldTransform_.translation_.x -= 1.0f;
+		} else if (input_->PushKey(DIK_D)) {
+			worldTransform_.translation_.x = 1.0f;
 		}
 	}
 }
