@@ -17,20 +17,13 @@ void CameraController::Update() {
 	// 追従対象とオフセットからカメラの目標座標を計算
 	goalPos = targetWorldTransform.translation_ + targetOffset_ + targetVelocity * kVelocityBias;
 
-	// 座標補間によりゆったり追従
-	camera_.translation_ = Vector3Lerp(camera_.translation_, goalPos, kInterpolationRate);
+// 座標補間によりゆったり追従（YやZだけ補間）
+	camera_.translation_.y = Lerp(camera_.translation_.y, goalPos.y, kInterpolationRate);
+	camera_.translation_.z = Lerp(camera_.translation_.z, goalPos.z, kInterpolationRate);
 
 	// 追従対象が画面外に出ないように補正
-	camera_.translation_.x = std::max(camera_.translation_.x, targetWorldTransform.translation_.x + kMargin.left);
-	camera_.translation_.x = std::min(camera_.translation_.x, targetWorldTransform.translation_.x + kMargin.right);
 	camera_.translation_.y = std::max(camera_.translation_.y, targetWorldTransform.translation_.y + kMargin.bottom);
 	camera_.translation_.y = std::min(camera_.translation_.y, targetWorldTransform.translation_.y + kMargin.top);
-
-	// 行動範囲制御
-	camera_.translation_.x = std::max(camera_.translation_.x, moveableArea_.left);
-	camera_.translation_.x = std::min(camera_.translation_.x, moveableArea_.right);
-	//camera_.translation_.y = std::max(camera_.translation_.y, moveableArea_.bottom);
-	//camera_.translation_.y = std::min(camera_.translation_.y, moveableArea_.top);
 
 	// 行列を更新する
 	camera_.UpdateMatrix();

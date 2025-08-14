@@ -81,6 +81,7 @@ void GameScene::Update() {
 
 	screw_->Update();
 	rocket_->Update();
+	screw_->FollowRocket(rocket_->GetWorldTransform());
 
 	cameraController_->Update();
 

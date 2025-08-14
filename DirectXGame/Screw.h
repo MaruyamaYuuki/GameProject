@@ -25,6 +25,10 @@ public:
 
 	float GetEnergy() { return energy_; }
 
+	void FollowRocket(const WorldTransformEx& rocketTransform);
+
+	void UpdateDuringFlight(float progress, float rocketSpeed);
+
 private:
 	XINPUT_STATE state, preState;
 
@@ -47,4 +51,6 @@ private:
 	float accumulatedAngle_ = 0.0f;   // 合計回転数
 
 	ScrewType screwType_ = ScrewType::Button;
+
+	KamataEngine::Vector3 offsetFromRocket_ = {1.0f, 0.0f, 0.0f};
 };

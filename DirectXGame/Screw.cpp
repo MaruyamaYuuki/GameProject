@@ -7,6 +7,7 @@
 #include <algorithm>
 
 using namespace KamataEngine;
+using namespace KamataEngine::MathUtility;
 
 void Screw::Initialize(Model* model, Input* input, Timer* timer) {
 	assert(model);
@@ -115,4 +116,28 @@ void Screw::ScrewWinding() {
 		// 角度保存
 		previousStickAngle_ = currentAngle;
 	}
+}
+
+void Screw::FollowRocket(const WorldTransformEx& rocketTransform) {
+	// ロケット座標にオフセットを足して完全同期
+	worldTransform_.translation_ = rocketTransform.translation_ + offsetFromRocket_;
+}
+
+void Screw::UpdateDuringFlight(float progress, float rocketSpeed) {
+	// 飛行していないときは何もしない
+	if (rocketSpeed <= 0.0f) {
+		return;
+	}
+
+	// progress: 0.0 → 発射直後, 1.0 → 停止直前
+	// 回転速度係数（停止に近づくと遅くなる）
+	float speedFactor = 5.0f - progress; // 0.0で停止、1.0で最大速
+
+	// 「ネジを回した方向」と逆方向に回転
+	// screwType_ によって回転方向を判断
+	float direction = (screwType_ == ScrewType::Button) ? -1.0f : 1.0f;
+	// 例：回転スピード定数
+	float rotationSpeedOnFlight = 2.0f; // ラジアン毎秒
+
+	worldTransform_.rotation_.x += direction * rotationSpeedOnFlight * speedFactor * (1.0f / 60.0f);
 }

@@ -23,7 +23,7 @@ void Rocket::Initialize(Model* model, Input* input, Screw* screw, Timer* timer) 
 
 void Rocket::Update() { 
 	Firing();
-
+	//Move();
 	DebugText::GetInstance()->ConsolePrintf("FiringDistance : %f\n", firingDistance_);
 	DebugText::GetInstance()->ConsolePrintf("Translation : %f\nVelocity.Y : %f", worldTransform_.translation_.y,velocity_.y);
 
@@ -67,6 +67,8 @@ void Rocket::Firing() {
 		float progress = worldTransform_.translation_.y / firingDistance_;
 		progress = std::clamp(progress, 0.0f, 1.0f);
 
+		screw_->UpdateDuringFlight(progress, velocity_.y);
+
 		// 最小速度保証付きの放物線的な動き
 		velocity_.y = minSpeed + (vMax - minSpeed) * std::sin((1.0f - progress) * 3.14159f);
 
@@ -79,10 +81,39 @@ void Rocket::Firing() {
 			isFiring_ = false;
 		}
 
-		if (input_->PushKey(DIK_A)) {
-			worldTransform_.translation_.x -= 1.0f;
-		} else if (input_->PushKey(DIK_D)) {
-			worldTransform_.translation_.x = 1.0f;
+		Move();
+	}
+}
+
+void Rocket::Move() {
+	// 左右移動の処理
+	XINPUT_STATE state;
+	ZeroMemory(&state, sizeof(XINPUT_STATE));
+	XInputGetState(0, &state);
+
+	bool isDPadRPress = (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT);
+	bool isDPadLPress = (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT);
+
+    // 左右移動などの処理
+	if (input_->PushKey(DIK_A) || isDPadLPress) {
+		worldTransform_.translation_.x -= velocity_.x;
+	}
+	if (input_->PushKey(DIK_D) || isDPadRPress) {
+		worldTransform_.translation_.x += velocity_.x;
+	}
+
+	// ジョイスティック
+	if (input_->GetJoystickState(0, state)) {
+		float lx = state.Gamepad.sThumbLX;
+		const int DEADZONE = 8000;
+		if (lx < -DEADZONE) {
+			worldTransform_.translation_.x -= velocity_.x;
+		}
+		if (lx > DEADZONE) {
+			worldTransform_.translation_.x += velocity_.x;
 		}
 	}
+
+	// 移動範囲を制限
+	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -20.0f, 20.0f);
 }

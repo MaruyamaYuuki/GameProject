@@ -25,6 +25,8 @@ public:
 
 	void Firing();
 
+	void Move();
+
 	const WorldTransformEx& GetWorldTransform() const { return worldTransform_; }
 
 	const KamataEngine::Vector3& GetVelocity() const { return velocity_; }
@@ -36,7 +38,7 @@ private:
 
 	KamataEngine::Input* input_ = nullptr;
 
-	KamataEngine::Vector3 velocity_ = {};
+	KamataEngine::Vector3 velocity_ = {1.0f, 0.0f, 0.0f};
 
 	bool testFlag_ = false;
 	bool isFiring_ = false;
@@ -50,5 +52,6 @@ private:
 	Timer* timer_ = nullptr;
 
 	bool hit = false;
-
+	
+	float rocketWidth = 1.0f; // ロケットの幅
 };
