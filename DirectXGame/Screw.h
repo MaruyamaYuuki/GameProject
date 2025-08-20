@@ -25,10 +25,6 @@ public:
 
 	float GetEnergy() { return energy_; }
 
-	void FollowRocket(const WorldTransformEx& rocketTransform);
-
-	void UpdateDuringFlight(float progress, float rocketSpeed);
-
 private:
 	XINPUT_STATE state, preState;
 

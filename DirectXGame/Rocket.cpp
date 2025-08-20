@@ -67,8 +67,6 @@ void Rocket::Firing() {
 		float progress = worldTransform_.translation_.y / firingDistance_;
 		progress = std::clamp(progress, 0.0f, 1.0f);
 
-		screw_->UpdateDuringFlight(progress, velocity_.y);
-
 		// 最小速度保証付きの放物線的な動き
 		velocity_.y = minSpeed + (vMax - minSpeed) * std::sin((1.0f - progress) * 3.14159f);
 
