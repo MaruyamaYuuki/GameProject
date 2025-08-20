@@ -163,6 +163,13 @@ public: // メンバ関数
 	/// <returns>接続されているジョイスティック数</returns>
 	size_t GetNumberOfJoysticks();
 
+	bool IsControllerConnected() {
+		XINPUT_STATE state;
+		ZeroMemory(&state, sizeof(XINPUT_STATE));
+		return (XInputGetState(0, &state) == ERROR_SUCCESS);
+	}
+
+
 private:
 	static BOOL CALLBACK EnumJoysticksCallback(const DIDEVICEINSTANCE* pdidInstance, VOID* pContext) noexcept;
 	Input() = default;

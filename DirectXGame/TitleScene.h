@@ -20,6 +20,8 @@ public:
 
 	void CameraMove();
 
+	void SwitchStartTexture();
+
 	bool IsFinished() const { return isFinished_;}
 
 private:
@@ -37,7 +39,11 @@ private:
 	KamataEngine::Model* modelField_ = nullptr;
 
 	KamataEngine::Sprite* spriteTitle_ = nullptr;
+	KamataEngine::Sprite* spriteStart_ = nullptr;
+
 	uint32_t textureHandleTitle_ = 0;
+	uint32_t textureHandleStartToSpace_ = 0;
+	uint32_t textureHandleStartToA_ = 0;
 
 	Screw* screw_ = nullptr;
 	Rocket* rocket_ = nullptr;
@@ -49,6 +55,6 @@ private:
 	bool isMove_ = false;
 	bool isFinished_ = false;
 
-	float position_ = 0.0f;
+	float position_ = 100.0f;
 
 };

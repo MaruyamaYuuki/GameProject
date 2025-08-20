@@ -16,6 +16,7 @@ TitleScene::~TitleScene() {
 	delete modelField_;
 
 	delete spriteTitle_;
+	delete spriteStart_;
 }
 
 void TitleScene::Initialize() {
@@ -24,11 +25,8 @@ void TitleScene::Initialize() {
 
 	camera_.Initialize();
 
-// --- カメラの位置を少し上に、奥に配置する ---
 	camera_.translation_ = {0.0f, 0.0f, -distance};
-
-	// --- カメラを下方向に傾ける（X軸回転を追加）---
-	//camera_.rotation_ = {0.1f, 0.0f, 0.0f}; 
+	camera_.rotation_.x = -0.7f;
 
 	modelRocket_ = Model::CreateFromOBJ("rocket", true);
 	modelScrew_ = Model::CreateFromOBJ("screw", true);
@@ -48,16 +46,25 @@ void TitleScene::Initialize() {
 	field_->Initialize(modelField_);
 
 	textureHandleTitle_ = TextureManager::Load("testTitle.png");
-	spriteTitle_ = Sprite::Create(textureHandleTitle_, {0.0f, 0.0f});
+	textureHandleStartToSpace_ = TextureManager::Load("startToSpace.png");
+	textureHandleStartToA_ = TextureManager::Load("startToA.png");
 
+	spriteTitle_ = Sprite::Create(textureHandleTitle_, {0.0f, 0.0f});
+	spriteStart_ = Sprite::Create(textureHandleStartToSpace_, {0.0f, 0.0f});
 }
 
 void TitleScene::Update() {
+
+	Input::GetInstance()->GetJoystickState(0, state);
+	Input::GetInstance()->GetJoystickStatePrevious(0, preState);
+
 	bool isSpacePressed = input->TriggerKey(DIK_SPACE);
 	bool isAButtonPressed = (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_A);
 
+	SwitchStartTexture();
+
 	if (isSpacePressed || isAButtonPressed) {
-		isFinished_ = true;
+		isMove_ = true;
 	}
 
 	skydome_->Update();
@@ -94,11 +101,14 @@ void TitleScene::Draw() {
 	Model::PostDraw();
 
 
-
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(dxCommon->GetCommandList());
 
-	//spriteTitle_->Draw();
+	spriteTitle_->Draw();
+	if (!isMove_) {
+    	spriteStart_->Draw();
+	}
+
 
 	// 前景スプライト描画後処理
 	Sprite::PostDraw();
@@ -106,9 +116,36 @@ void TitleScene::Draw() {
 
 void TitleScene::CameraMove() {
 	if (isMove_) {
-		if (position_ > 0.0f) {
-			position_ -= 0.1f;
+
+		// 回転をじわじわ 0 に近づける
+		if (camera_.rotation_.x < 0.0f) {
+			camera_.rotation_.x += 0.005f; // 数値は調整
+			if (camera_.rotation_.x > 0.0f) {
+				camera_.rotation_.x = 0.0f; // オーバー防止
+				isFinished_ = true;
+			}
 		}
-		camera_.translation_.y = position_;
+	}
+
+	// rotation.x の値に応じてスプライトのアルファを変える
+	// 初期値を -0.3f として、0.0f で透明になるように
+	float t = camera_.rotation_.x / -0.3f; // -0.3 → 1, 0 → 0
+	if (t < 0.0f)
+		t = 0.0f;
+	if (t > 1.0f)
+		t = 1.0f;
+
+	// Sprite の色を設定（RGBA）
+	spriteTitle_->SetColor({1.0f, 1.0f, 1.0f, t});
+}
+
+void TitleScene::SwitchStartTexture() {
+	// コントローラー接続判定
+	bool isControllerConnected = input->IsControllerConnected();
+
+	if (isControllerConnected) {
+		spriteStart_->SetTextureHandle(textureHandleStartToA_);
+	} else {
+		spriteStart_->SetTextureHandle(textureHandleStartToSpace_);
 	}
 }
