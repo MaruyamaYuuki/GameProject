@@ -4,13 +4,37 @@ using namespace KamataEngine;
 
 TitleScene::TitleScene() {}
 
-TitleScene::~TitleScene() {}
+TitleScene::~TitleScene() {
+	delete rocket_;
+	delete screw_;
+
+	delete modelRocket_;
+	delete modelScrew_;
+}
 
 void TitleScene::Initialize() {
 	dxCommon = DirectXCommon::GetInstance();
 	input = Input::GetInstance();
 
 	camera_.Initialize();
+
+
+
+	// 真後ろから見下ろす感じなら
+	camera_.translation_ = {0.0f, 0.0f, -distance};
+
+	modelRocket_ = Model::CreateFromOBJ("rocket", true);
+	modelScrew_ = Model::CreateFromOBJ("screw", true);
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+
+	screw_ = new Screw();
+	screw_->InitializeOnlyModel(modelScrew_);
+
+	rocket_ = new Rocket();
+	rocket_->InitializeOnlyModel(modelRocket_);
+
+	skydome_ = new Skydome();
+	skydome_->Initialize(modelSkydome_, Vector3{900.0f, 900.0f, 900.0f}, &camera_);
 
 }
 
@@ -21,6 +45,13 @@ void TitleScene::Update() {
 	if (isSpacePressed || isAButtonPressed) {
 		isFinished_ = true;
 	}
+
+	skydome_->Update();
+
+	screw_->UpdateOnlyModel();
+	rocket_->UpdateOnlyModel();
+
+	camera_.UpdateMatrix();
 }
 
 void TitleScene::Draw() {
@@ -33,9 +64,15 @@ void TitleScene::Draw() {
 
 	// 3Dオブジェクト描画前処理
 	Model::PreDraw(dxCommon->GetCommandList());
+	skydome_->Draw();
+
+	screw_->Draw(camera_);
+	rocket_->Draw(camera_);
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
+
+
 
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(dxCommon->GetCommandList());

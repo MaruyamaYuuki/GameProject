@@ -53,6 +53,11 @@ void Screw::InitializeOnlyModel(Model* model) {
 	worldTransform_.translation_.x += 1;
 }
 
+void Screw::UpdateOnlyModel() {
+
+	worldTransform_.UpdateMatrix();
+}
+
 void Screw::ScrewWinding() {
 	// ネジ開始タイミングでのみ処理
 	if (!timer_->IsScrewStart())
