@@ -12,6 +12,7 @@ GameScene::~GameScene() {
 	delete modelScrew_;
 	delete modelSkydome_;
 	delete modelUniversedome_;
+	delete modelField_;
 
 	delete timer_;
 	delete screw_;
@@ -20,6 +21,7 @@ GameScene::~GameScene() {
 	delete universedome_;
 	delete cameraController_;
 	delete debugCamera_;
+	delete field_;
 }
 
 void GameScene::Initialize() {
@@ -35,6 +37,7 @@ void GameScene::Initialize() {
 	modelScrew_ = Model::CreateFromOBJ("screw", true);
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	modelUniversedome_ = Model::CreateFromOBJ("universedome", true);
+	modelField_ = Model::CreateFromOBJ("field", true);
 
 	// タイマーの初期化・生成
 	timer_ = new Timer();
@@ -50,6 +53,9 @@ void GameScene::Initialize() {
 	universedome_->Initialize(modelUniversedome_, universeSize_, &camera_);
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, skySize_, &camera_);
+	// フィールドの初期化・生成
+	field_ = new Field();
+	field_->Initialize(modelField_);
 	// カメラコントローラの初期化・生成
 	cameraController_ = new CameraController(); 
 	cameraController_->Initialize();            
@@ -73,6 +79,7 @@ void GameScene::Update() {
 	skydome_->Update();
 	skydome_->UpdateAlphaByDistance(rocket_->GetWorldTransform().translation_);
 
+	field_->Update();
 
 	timer_->Update();
 
@@ -131,6 +138,7 @@ void GameScene::Draw() {
 	universedome_->Draw();
 	skydome_->Draw();
 
+	field_->Draw(camera_);
 
 	screw_->Draw(camera_);
 

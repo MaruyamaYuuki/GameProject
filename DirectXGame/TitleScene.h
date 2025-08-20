@@ -3,6 +3,7 @@
 #include "Rocket.h"
 #include "Screw.h"
 #include "Skydome.h"
+#include "Field.h"
 
 class TitleScene {
 
@@ -16,6 +17,8 @@ public:
 	void Update();
 
 	void Draw();
+
+	void CameraMove();
 
 	bool IsFinished() const { return isFinished_;}
 
@@ -31,11 +34,21 @@ private:
 	KamataEngine::Model* modelRocket_ = nullptr;
 	KamataEngine::Model* modelScrew_ = nullptr;
 	KamataEngine::Model* modelSkydome_ = nullptr;
+	KamataEngine::Model* modelField_ = nullptr;
+
+	KamataEngine::Sprite* spriteTitle_ = nullptr;
+	uint32_t textureHandleTitle_ = 0;
 
 	Screw* screw_ = nullptr;
 	Rocket* rocket_ = nullptr;
 
 	Skydome* skydome_ = nullptr;
 
+	Field* field_ = nullptr;
+	
+	bool isMove_ = false;
 	bool isFinished_ = false;
+
+	float position_ = 0.0f;
+
 };
