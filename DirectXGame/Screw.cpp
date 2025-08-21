@@ -18,7 +18,7 @@ void Screw::Initialize(Model* model, Input* input, Timer* timer) {
 	this->timer_ = timer;
 
 	worldTransform_.Initialize();
-	worldTransform_.translation_.x += 1;
+	worldTransform_.translation_ = offsetFromRocket_;
 
 
 }
@@ -50,7 +50,7 @@ void Screw::InitializeOnlyModel(Model* model) {
 	assert(model);
 	model_ = model;
 	worldTransform_.Initialize();
-	worldTransform_.translation_.x += 1;
+	worldTransform_.translation_ = offsetFromRocket_;
 }
 
 void Screw::UpdateOnlyModel() {

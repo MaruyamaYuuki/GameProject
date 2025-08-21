@@ -48,5 +48,5 @@ private:
 
 	ScrewType screwType_ = ScrewType::Button;
 
-	KamataEngine::Vector3 offsetFromRocket_ = {1.0f, 0.0f, 0.0f};
+	KamataEngine::Vector3 offsetFromRocket_ = {1.0f, 1.0f, 0.0f};
 };
