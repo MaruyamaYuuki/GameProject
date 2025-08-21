@@ -26,7 +26,7 @@ void TitleScene::Initialize() {
 	camera_.Initialize();
 
 	camera_.translation_ = {0.0f, 0.0f, -distance};
-	camera_.rotation_.x = -0.7f;
+	camera_.rotation_.x = -0.8f;
 
 	modelRocket_ = Model::CreateFromOBJ("rocket", true);
 	modelScrew_ = Model::CreateFromOBJ("screw", true);
@@ -75,7 +75,6 @@ void TitleScene::Update() {
 	rocket_->UpdateOnlyModel();
 
 	CameraMove();
-	DebugText::GetInstance()->ConsolePrintf("Flag : %d\nCameraYPosition : %f\n", isMove_, camera_.translation_.y);
 
 	camera_.UpdateMatrix();
 }

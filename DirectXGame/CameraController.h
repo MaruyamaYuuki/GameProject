@@ -15,7 +15,7 @@ public:
 
 	void Initialize();
 
-	void Update();
+	void Update(bool flag);
 
 	void SetTarget(Rocket* rocket) { target_ = rocket; }
 
@@ -25,6 +25,14 @@ public:
 
 	void SetMoveableArea(Rect area) { moveableArea_ = area; }
 
+	bool CameraZoomOuted() {
+		if (targetOffset_.z <= zoomOutDistance_.z) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	// Vector3での線形補間
 	KamataEngine::Vector3 Vector3Lerp(const KamataEngine::Vector3& start, const KamataEngine::Vector3& end, float t);
 
@@ -32,7 +40,10 @@ private:
 	KamataEngine::Camera camera_;
 	Rocket* target_ = nullptr;
 	// 追従対象のカメラの座標の差（オフセット）
-	KamataEngine::Vector3 targetOffset_ = {0, 0, -30.0f};
+	KamataEngine::Vector3 targetOffset_ = {0, 0, -10.0f};
+	// ズームアウト後のカメラの距離
+	KamataEngine::Vector3 zoomOutDistance_ = {0, 0, -30.0f};
+	static inline const float kOffsetLerpRate = 0.05f;
 	// カメラ移動範囲
 	Rect moveableArea_ = {0, 100, 0, 100};
 	// カメラの目標座標

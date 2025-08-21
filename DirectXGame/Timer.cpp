@@ -25,6 +25,7 @@ void Timer::ScrewTimer(bool isFlag) {
 		isScrewStart = true;
 	} else if (screwTime <= 0){
 		isScrewStart = false;
+		isZoomOut = true;
 	}
 }
 

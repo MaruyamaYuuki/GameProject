@@ -17,8 +17,6 @@ void Field::Initialize(Model* model) {
 
 void Field::Update() { 
 	worldTransform_.UpdateMatrix(); 
-
-	DebugText::GetInstance()->ConsolePrintf("RotateX : %dd\n",worldTransform_.rotation_.x);
 }
 
 void Field::Draw(Camera& camera) { 

@@ -31,7 +31,7 @@ private:
 	KamataEngine::Input* input = nullptr;
 
 	KamataEngine::Camera camera_;
-	float distance = 30.0f; // CameraController で使ってる距離と同じにする
+	float distance = 10.0f; // CameraController で使ってる距離と同じにする
 
 	KamataEngine::Model* modelRocket_ = nullptr;
 	KamataEngine::Model* modelScrew_ = nullptr;
@@ -54,7 +54,5 @@ private:
 	
 	bool isMove_ = false;
 	bool isFinished_ = false;
-
-	float position_ = 100.0f;
 
 };

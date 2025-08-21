@@ -27,6 +27,8 @@ public:
 
 	bool IsFiring() { return isFiring; }
 
+	bool IsZoomOut() { return isZoomOut; }
+
 private:
 
 	const float deltaTime = 1.0f / 60.0f;
@@ -42,4 +44,6 @@ private:
 	bool isFiring = false;
 
 	bool isCountStart = false;
+
+	bool isZoomOut = false;
 };

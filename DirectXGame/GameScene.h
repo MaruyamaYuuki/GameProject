@@ -45,7 +45,6 @@ private:
 	Field* field_ = nullptr;
 
 	bool screwFlag = false;
-	bool countFlag = false;
 
 	bool isFinished_ = false;
 

@@ -71,9 +71,6 @@ void GameScene::Update() {
 	if (input->TriggerKey(DIK_S)) {
 		screwFlag = true;
 	}
-	if (input->TriggerKey(DIK_C)) {
-		countFlag = true;
-	}
 
 	universedome_->Update();
 	skydome_->Update();
@@ -84,20 +81,15 @@ void GameScene::Update() {
 	timer_->Update();
 
 	timer_->ScrewTimer(screwFlag);
-	timer_->FiringCountTimer(countFlag);
+	timer_->FiringCountTimer(cameraController_->CameraZoomOuted());
 
 	screw_->Update();
 	rocket_->Update();
 
-	cameraController_->Update();
+	cameraController_->Update(timer_->IsZoomOut());
+	DebugText::GetInstance()->ConsolePrintf("Flag : %d\n", cameraController_->CameraZoomOuted());
 
-	/*	const Camera& cameraViewProjection = cameraController_->GetCamera();
-	camera_.matView = cameraViewProjection.matView;
-	camera_.matProjection = cameraViewProjection.matProjection;
-	camera_.TransferMatrix();*/
-
-
-	    	// カメラの処理
+	// カメラの処理
 	if (isDebugCameraActive_) {
 		// デバッグカメラの更新
 		debugCamera_->Update();
