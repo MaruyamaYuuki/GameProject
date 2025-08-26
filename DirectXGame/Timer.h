@@ -17,7 +17,7 @@ public:
 
 	void ScrewTimer(bool isFlag);
 
-	void FiringCountTimer(bool isFlag);
+	void FiringCountTimer();
 
 	void Reset();
 
@@ -27,7 +27,9 @@ public:
 
 	bool IsFiring() { return isFiring; }
 
-	bool IsZoomOut() { return isZoomOut; }
+	float GetScrewTime() const { return screwTime; }
+
+	float GetFiringTime() const { return firingTime; }
 
 private:
 
@@ -45,5 +47,4 @@ private:
 
 	bool isCountStart = false;
 
-	bool isZoomOut = false;
 };

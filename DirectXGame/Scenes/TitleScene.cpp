@@ -1,6 +1,7 @@
 #include "TitleScene.h"
 
 using namespace KamataEngine;
+using namespace KamataEngine::MathUtility;
 
 TitleScene::TitleScene() {}
 
@@ -25,8 +26,7 @@ void TitleScene::Initialize() {
 
 	camera_.Initialize();
 
-	camera_.translation_ = {0.0f, 0.0f, -distance};
-	camera_.rotation_.x = -0.8f;
+	camera_.translation_ = {0.0f, 0.0f, startDistance};
 
 	modelRocket_ = Model::CreateFromOBJ("rocket", true);
 	modelScrew_ = Model::CreateFromOBJ("screw", true);
@@ -67,6 +67,16 @@ void TitleScene::Update() {
 		isMove_ = true;
 	}
 
+    // フェードアウト処理
+	if (isMove_) {
+		if (spriteAlpha_ > 0.0f) {
+			spriteAlpha_ -= fadeSpeed_;
+			if (spriteAlpha_ < 0.0f) {
+				spriteAlpha_ = 0.0f; // 負値にならないように固定
+			}
+		}
+	}
+
 	skydome_->Update();
 
 	field_->Update();
@@ -103,11 +113,13 @@ void TitleScene::Draw() {
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(dxCommon->GetCommandList());
 
-	spriteTitle_->Draw();
-	if (!isMove_) {
-    	spriteStart_->Draw();
-	}
+    if (spriteAlpha_ > 0.0f) {
+		spriteTitle_->SetColor({1.0f, 1.0f, 1.0f, spriteAlpha_});
+		spriteTitle_->Draw();
 
+		spriteStart_->SetColor({1.0f, 1.0f, 1.0f, spriteAlpha_});
+		spriteStart_->Draw();
+	}
 
 	// 前景スプライト描画後処理
 	Sprite::PostDraw();
@@ -115,27 +127,25 @@ void TitleScene::Draw() {
 
 void TitleScene::CameraMove() {
 	if (isMove_) {
+		float kLerpRate = 0.05f; // 補間速度（好みで調整）
 
-		// 回転をじわじわ 0 に近づける
-		if (camera_.rotation_.x < 0.0f) {
-			camera_.rotation_.x += 0.005f; // 数値は調整
-			if (camera_.rotation_.x > 0.0f) {
-				camera_.rotation_.x = 0.0f; // オーバー防止
-				isFinished_ = true;
+		// ズームアップの処理（Z軸だけ動かす）
+		if (isMove_) {
+			camera_.translation_.z = Lerp(camera_.translation_.z, zoomUpDistance, kLerpRate);
+
+			// 誤差吸収：目標に十分近づいたらスナップ
+			if (fabs(camera_.translation_.z - zoomUpDistance) < 0.01f) {
+				camera_.translation_.z = zoomUpDistance;
 			}
+		} else {
+			// 初期状態でのカメラ距離
+			camera_.translation_.z = startDistance;
 		}
 	}
 
-	// rotation.x の値に応じてスプライトのアルファを変える
-	// 初期値を -0.3f として、0.0f で透明になるように
-	float t = camera_.rotation_.x / -0.3f; // -0.3 → 1, 0 → 0
-	if (t < 0.0f)
-		t = 0.0f;
-	if (t > 1.0f)
-		t = 1.0f;
-
-	// Sprite の色を設定（RGBA）
-	spriteTitle_->SetColor({1.0f, 1.0f, 1.0f, t});
+	if (camera_.translation_.z == zoomUpDistance) {
+		isFinished_ = true;
+	}
 }
 
 void TitleScene::SwitchStartTexture() {

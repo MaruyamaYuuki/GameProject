@@ -15,7 +15,7 @@ public:
 
 	void Initialize();
 
-	void Update(bool flag);
+	void Update();
 
 	void SetTarget(Rocket* rocket) { target_ = rocket; }
 
@@ -40,9 +40,9 @@ private:
 	KamataEngine::Camera camera_;
 	Rocket* target_ = nullptr;
 	// 追従対象のカメラの座標の差（オフセット）
-	KamataEngine::Vector3 targetOffset_ = {0, 0, -10.0f};
+	KamataEngine::Vector3 targetOffset_ = {0, 0, -20.0f};
 	// ズームアウト後のカメラの距離
-	KamataEngine::Vector3 zoomOutDistance_ = {0, 0, -30.0f};
+	KamataEngine::Vector3 zoomOutDistance_ = {0, 0, -40.0f};
 	static inline const float kOffsetLerpRate = 0.05f;
 	// カメラ移動範囲
 	Rect moveableArea_ = {0, 100, 0, 100};

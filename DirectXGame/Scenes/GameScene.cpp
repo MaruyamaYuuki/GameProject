@@ -58,7 +58,7 @@ void GameScene::Initialize() {
 	field_->Initialize(modelField_);
 	// UIの初期化・生成
 	ui_ = new UI();
-	ui_->Initialize(timer_);
+	ui_->Initialize(timer_, rocket_);
 	// カメラコントローラの初期化・生成
 	cameraController_ = new CameraController(); 
 	cameraController_->Initialize();            
@@ -84,15 +84,14 @@ void GameScene::Update() {
 	timer_->Update();
 
 	timer_->ScrewTimer(screwFlag);
-	timer_->FiringCountTimer(cameraController_->CameraZoomOuted());
+	timer_->FiringCountTimer();
 
 	screw_->Update();
 	rocket_->Update();
 
 	ui_->Update();
-	ui_->UpdateScore(rocket_->GetWorldTransform().translation_.y);
 
-	cameraController_->Update(timer_->IsZoomOut());
+	cameraController_->Update();
 	DebugText::GetInstance()->ConsolePrintf("Flag : %d\n", cameraController_->CameraZoomOuted());
 
 	// カメラの処理

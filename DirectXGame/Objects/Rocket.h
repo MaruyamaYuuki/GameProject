@@ -27,7 +27,7 @@ public:
 
 	const KamataEngine::Vector3& GetVelocity() const { return velocity_; }
 
-	float GetFiringDistance() const { return firingDistance_; }
+	bool IsFiring() const { return isFiring_; }
 
 private:
 	WorldTransformEx worldTransform_;
@@ -38,7 +38,6 @@ private:
 
 	KamataEngine::Vector3 velocity_ = {1.0f, 0.0f, 0.0f};
 
-	bool testFlag_ = false;
 	bool isFiring_ = false;
 
 	float screwCount_ = 0;   // ネジを巻いた回数
