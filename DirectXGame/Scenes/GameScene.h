@@ -1,11 +1,12 @@
 #pragma once
 #include "KamataEngine.h"
-#include "Timer.h"
-#include "Screw.h"
-#include "Rocket.h"
-#include "CameraController.h"
-#include "Skydome.h"
-#include "Field.h"
+#include "../Timer.h"
+#include "../Objects/Screw.h"
+#include "../Objects/Rocket.h"
+#include "../CameraController.h"
+#include "../Objects/Skydome.h"
+#include "../Objects/Field.h"
+#include "../UI.h"
 
 class GameScene {
 public:
@@ -43,6 +44,8 @@ private:
 	Skydome* universedome_ = nullptr;
 
 	Field* field_ = nullptr;
+
+	UI* ui_ = nullptr;
 
 	bool screwFlag = false;
 

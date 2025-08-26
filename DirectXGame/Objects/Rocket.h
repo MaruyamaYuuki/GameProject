@@ -1,15 +1,11 @@
 #pragma once
 #include "KamataEngine.h"
-#include "WorldTransformEx.h"
+#include "../WorldTransformEx.h"
 
 
 class Screw;
 class Timer;
 class Rocket {
-	enum class FiringState { 
-		Standby, 
-		ReadyToFire, 
-		Firing };
 
 public:
 
@@ -31,6 +27,8 @@ public:
 
 	const KamataEngine::Vector3& GetVelocity() const { return velocity_; }
 
+	float GetFiringDistance() const { return firingDistance_; }
+
 private:
 	WorldTransformEx worldTransform_;
 
@@ -45,7 +43,7 @@ private:
 
 	float screwCount_ = 0;   // ネジを巻いた回数
 
-	float maxFiringDistance_ = 9999; // 最大飛距離
+	float maxFiringDistance_ = 999; // 最大飛距離
 	float firingDistance_ = 0;       // 飛距離
 
 	Screw* screw_ = nullptr;

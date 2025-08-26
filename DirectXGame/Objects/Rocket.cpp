@@ -1,7 +1,7 @@
 #define NOMINMAX
 #include "Rocket.h"
 #include "Screw.h"
-#include "Timer.h"
+#include "../Timer.h"
 #include <cassert>
 #include <algorithm>
 
@@ -50,7 +50,7 @@ void Rocket::Firing() {
 	// 定数（調整用）
 	const float minSpeed = 0.1f; // 初速の下限
 	const float vMax = 3.5f;    // 最大速度
-	const float distancePerScrew = 80.0f;
+	const float distancePerScrew = 8.0f;
 
 	if (timer_->GetFiringState() == Timer::FiringState::ReadyToFire) {
 		// ネジを巻いた回数に応じて距離を決定

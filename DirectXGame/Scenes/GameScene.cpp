@@ -1,5 +1,4 @@
 #include "GameScene.h"
-#include "Rocket.h"
 #include <cfloat>
 
 using namespace KamataEngine;
@@ -22,6 +21,7 @@ GameScene::~GameScene() {
 	delete cameraController_;
 	delete debugCamera_;
 	delete field_;
+	delete ui_;
 }
 
 void GameScene::Initialize() {
@@ -56,6 +56,9 @@ void GameScene::Initialize() {
 	// フィールドの初期化・生成
 	field_ = new Field();
 	field_->Initialize(modelField_);
+	// UIの初期化・生成
+	ui_ = new UI();
+	ui_->Initialize(timer_);
 	// カメラコントローラの初期化・生成
 	cameraController_ = new CameraController(); 
 	cameraController_->Initialize();            
@@ -85,6 +88,9 @@ void GameScene::Update() {
 
 	screw_->Update();
 	rocket_->Update();
+
+	ui_->Update();
+	ui_->UpdateScore(rocket_->GetWorldTransform().translation_.y);
 
 	cameraController_->Update(timer_->IsZoomOut());
 	DebugText::GetInstance()->ConsolePrintf("Flag : %d\n", cameraController_->CameraZoomOuted());
@@ -136,11 +142,14 @@ void GameScene::Draw() {
 
 	rocket_->Draw(camera_);
 
+
+
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
 
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(dxCommon->GetCommandList());
+	ui_->Draw();
 
 	// 前景スプライト描画後処理
 	Sprite::PostDraw();

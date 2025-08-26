@@ -107,14 +107,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CameraController.cpp" />
-    <ClCompile Include="Field.cpp" />
-    <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="Objects\Field.cpp" />
+    <ClCompile Include="Scenes\GameScene.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Rocket.cpp" />
-    <ClCompile Include="Screw.cpp" />
-    <ClCompile Include="Skydome.cpp" />
+    <ClCompile Include="Objects\Rocket.cpp" />
+    <ClCompile Include="Objects\Screw.cpp" />
+    <ClCompile Include="Objects\Skydome.cpp" />
     <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="Scenes\TitleScene.cpp" />
+    <ClCompile Include="UI.cpp" />
     <ClCompile Include="WorldTransformEx.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -194,13 +195,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraController.h" />
-    <ClInclude Include="Field.h" />
-    <ClInclude Include="GameScene.h" />
-    <ClInclude Include="Rocket.h" />
-    <ClInclude Include="Screw.h" />
-    <ClInclude Include="Skydome.h" />
+    <ClInclude Include="Objects\Field.h" />
+    <ClInclude Include="Scenes\GameScene.h" />
+    <ClInclude Include="Objects\Rocket.h" />
+    <ClInclude Include="Objects\Screw.h" />
+    <ClInclude Include="Objects\Skydome.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="Scenes\TitleScene.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="WorldTransformEx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,9 +1,9 @@
 #pragma once
 #include "KamataEngine.h"
-#include "Rocket.h"
-#include "Screw.h"
-#include "Skydome.h"
-#include "Field.h"
+#include "../Objects/Rocket.h"
+#include "../Objects/Screw.h"
+#include "../Objects/Skydome.h"
+#include "../Objects/Field.h"
 
 class TitleScene {
 

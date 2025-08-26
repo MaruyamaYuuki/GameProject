@@ -1,6 +1,6 @@
 #pragma once
 #include "KamataEngine.h"
-#include "WorldTransformEx.h"
+#include "../WorldTransformEx.h"
 
 class Skydome {
 public:
