@@ -20,7 +20,13 @@ public:
 
 	void CameraMove();
 
-	void SwitchStartTexture();
+	void SelectCommand();
+
+	bool IsOpenRule() const { return isOpenRule_; }
+
+	bool IsExit() const { return isExit_; }
+
+	bool IsOpenSetting() const { return isOpenSetting_; }
 
 	bool IsFinished() const { return isFinished_;}
 
@@ -40,11 +46,13 @@ private:
 	KamataEngine::Model* modelField_ = nullptr;
 
 	KamataEngine::Sprite* spriteTitle_ = nullptr;
-	KamataEngine::Sprite* spriteStart_ = nullptr;
+	KamataEngine::Sprite* spriteCommands_ = nullptr;
 
 	uint32_t textureHandleTitle_ = 0;
-	uint32_t textureHandleStartToSpace_ = 0;
-	uint32_t textureHandleStartToA_ = 0;
+	uint32_t textureHandleStart_ = 0;
+	uint32_t textureHandleRule_ = 0;
+	uint32_t textureHandleExit_ = 0;
+	uint32_t textureHandleSetting_ = 0;
 
 	Screw* screw_ = nullptr;
 	Rocket* rocket_ = nullptr;
@@ -53,10 +61,16 @@ private:
 
 	Field* field_ = nullptr;
 	
+	bool isSettingChoice_ = false;
 	bool isMove_ = false;
+	bool isOpenRule_ = false;
+	bool isExit_ = false;
+	bool isOpenSetting_ = false;
 	bool isFinished_ = false;
 
 	float spriteAlpha_ = 1.0f; // スプライトの透明度(初期値: 不透明)
 	float fadeSpeed_ = 0.02f;  // フェードアウト速度
+
+	int commandNum_ = 1;
 
 };

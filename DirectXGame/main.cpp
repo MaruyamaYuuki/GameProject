@@ -43,6 +43,11 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		UpdateScene();
 		ChangeScene();
 
+	    // TitleSceneでゲーム終了フラグが立っていたらループを抜ける
+		if (scene == Scene::kTitle && titleScene && titleScene->IsExit()) {
+			break;
+		}
+
 		// 描画処理
 		dxCommon->PreDraw();
 

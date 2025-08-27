@@ -17,7 +17,7 @@ TitleScene::~TitleScene() {
 	delete modelField_;
 
 	delete spriteTitle_;
-	delete spriteStart_;
+	delete spriteCommands_;
 }
 
 void TitleScene::Initialize() {
@@ -27,6 +27,14 @@ void TitleScene::Initialize() {
 	camera_.Initialize();
 
 	camera_.translation_ = {0.0f, 0.0f, startDistance};
+
+	commandNum_ = 1;
+	isSettingChoice_ = false;
+	isMove_ = false;
+	isOpenRule_ = false;
+	isExit_ = false;
+	isOpenSetting_ = false;
+	isFinished_ = false;
 
 	modelRocket_ = Model::CreateFromOBJ("rocket", true);
 	modelScrew_ = Model::CreateFromOBJ("screw", true);
@@ -45,27 +53,25 @@ void TitleScene::Initialize() {
 	field_ = new Field();
 	field_->Initialize(modelField_);
 
-	textureHandleTitle_ = TextureManager::Load("testTitle.png");
-	textureHandleStartToSpace_ = TextureManager::Load("startToSpace.png");
-	textureHandleStartToA_ = TextureManager::Load("startToA.png");
+	textureHandleTitle_ = TextureManager::Load("title.png");
+	textureHandleStart_ = TextureManager::Load("commands/startCommand.png");
+	textureHandleRule_ = TextureManager::Load("commands/ruleCommand.png");
+	textureHandleExit_ = TextureManager::Load("commands/exitCommand.png");
+	textureHandleSetting_ = TextureManager::Load("commands/settingCommand.png");
 
 	spriteTitle_ = Sprite::Create(textureHandleTitle_, {0.0f, 0.0f});
-	spriteStart_ = Sprite::Create(textureHandleStartToSpace_, {0.0f, 0.0f});
+	spriteCommands_ = Sprite::Create(textureHandleStart_, {0.0f, 0.0f});
 }
 
 void TitleScene::Update() {
 
+	spriteTitle_->SetPosition({0.0f, -50.0f});
+	spriteCommands_->SetPosition({0.0f, -25.0f});
+
 	Input::GetInstance()->GetJoystickState(0, state);
 	Input::GetInstance()->GetJoystickStatePrevious(0, preState);
 
-	bool isSpacePressed = input->TriggerKey(DIK_SPACE);
-	bool isAButtonPressed = (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_A);
-
-	SwitchStartTexture();
-
-	if (isSpacePressed || isAButtonPressed) {
-		isMove_ = true;
-	}
+	SelectCommand();
 
     // フェードアウト処理
 	if (isMove_) {
@@ -117,8 +123,23 @@ void TitleScene::Draw() {
 		spriteTitle_->SetColor({1.0f, 1.0f, 1.0f, spriteAlpha_});
 		spriteTitle_->Draw();
 
-		spriteStart_->SetColor({1.0f, 1.0f, 1.0f, spriteAlpha_});
-		spriteStart_->Draw();
+		spriteCommands_->SetColor({1.0f, 1.0f, 1.0f, spriteAlpha_});
+		if (!isSettingChoice_) {
+			switch (commandNum_) {
+			case 1: // Start
+				spriteCommands_->SetTextureHandle(textureHandleStart_);
+				break;
+			case 2: // Rule
+				spriteCommands_->SetTextureHandle(textureHandleRule_);
+				break;
+			case 3: // Exit
+				spriteCommands_->SetTextureHandle(textureHandleExit_);
+				break;
+			}
+		} else {
+			spriteCommands_->SetTextureHandle(textureHandleSetting_);
+		}
+		spriteCommands_->Draw();
 	}
 
 	// 前景スプライト描画後処理
@@ -148,13 +169,50 @@ void TitleScene::CameraMove() {
 	}
 }
 
-void TitleScene::SwitchStartTexture() {
-	// コントローラー接続判定
-	bool isControllerConnected = input->IsControllerConnected();
+void TitleScene::SelectCommand() { 
+	bool isUpPressed = input->TriggerKey(DIK_UP) || (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP); 
+	bool isDownPressed = input->TriggerKey(DIK_DOWN) || (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN);
+	bool isRightPressed = input->TriggerKey(DIK_RIGHT) || (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT);
+	bool isLeftPressed = input->TriggerKey(DIK_LEFT) || (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT);
+	bool isSpacePressed = input->TriggerKey(DIK_SPACE);
+	bool isAButtonPressed = (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_A);
 
-	if (isControllerConnected) {
-		spriteStart_->SetTextureHandle(textureHandleStartToA_);
-	} else {
-		spriteStart_->SetTextureHandle(textureHandleStartToSpace_);
+	if (isUpPressed) {
+		commandNum_--;
+		if (commandNum_ < 1) {
+			commandNum_ = 3;
+		}
+	} else if (isDownPressed) {
+		commandNum_++;
+		if (commandNum_ > 3) {
+			commandNum_ = 1;
+		}
+	}
+
+	if (isRightPressed || isLeftPressed) {
+		if (!isSettingChoice_) {
+			isSettingChoice_ = true;
+		} else {
+			isSettingChoice_ = false;
+			commandNum_ = 1;
+		}
+	}
+
+	if (isSpacePressed || isAButtonPressed) {
+		if (!isSettingChoice_) {
+			switch (commandNum_) {
+			case 1: // Start
+				isMove_ = true;
+				break;
+			case 2: // Rule
+				isOpenRule_ = true;
+				break;
+			case 3: // Exit
+				isExit_ = true;
+				break;
+			}
+		} else {
+			isOpenSetting_ = true;
+		}
 	}
 }
