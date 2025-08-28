@@ -113,6 +113,7 @@
     <ClCompile Include="Objects\Rocket.cpp" />
     <ClCompile Include="Objects\Screw.cpp" />
     <ClCompile Include="Objects\Skydome.cpp" />
+    <ClCompile Include="Setting.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Scenes\TitleScene.cpp" />
     <ClCompile Include="UI.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="Objects\Rocket.h" />
     <ClInclude Include="Objects\Screw.h" />
     <ClInclude Include="Objects\Skydome.h" />
+    <ClInclude Include="Setting.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Scenes\TitleScene.h" />
     <ClInclude Include="UI.h" />
