@@ -10,6 +10,8 @@ TitleScene::~TitleScene() {
 	delete screw_;
 	delete skydome_;
 	delete field_;
+	delete setting_;
+	delete ui_;
 
 	delete modelRocket_;
 	delete modelScrew_;
@@ -53,6 +55,12 @@ void TitleScene::Initialize() {
 	field_ = new Field();
 	field_->Initialize(modelField_);
 
+	setting_ = new Setting();
+	setting_->Load();
+	ui_ = new UI();
+	ui_->InitializeTitleUI(setting_);
+
+
 	textureHandleTitle_ = TextureManager::Load("title.png");
 	textureHandleStart_ = TextureManager::Load("commands/startCommand.png");
 	textureHandleRule_ = TextureManager::Load("commands/ruleCommand.png");
@@ -65,11 +73,18 @@ void TitleScene::Initialize() {
 
 void TitleScene::Update() {
 
-	spriteTitle_->SetPosition({0.0f, -50.0f});
+	spriteTitle_->SetPosition({0.0f, 0.0f});
 	spriteCommands_->SetPosition({0.0f, -25.0f});
 
 	Input::GetInstance()->GetJoystickState(0, state);
 	Input::GetInstance()->GetJoystickStatePrevious(0, preState);
+
+	isUpPressed = input->TriggerKey(DIK_UP) || (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP);
+	isDownPressed = input->TriggerKey(DIK_DOWN) || (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN);
+	isRightPressed = input->TriggerKey(DIK_RIGHT) || (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT);
+	isLeftPressed = input->TriggerKey(DIK_LEFT) || (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT);
+	isSpacePressed = input->TriggerKey(DIK_SPACE);
+	isAButtonPressed = (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_A);
 
 	SelectCommand();
 
@@ -83,16 +98,18 @@ void TitleScene::Update() {
 		}
 	}
 
+	SetGamePadConfig();
+
 	skydome_->Update();
-
 	field_->Update();
-
 	screw_->UpdateOnlyModel();
 	rocket_->UpdateOnlyModel();
 
 	CameraMove();
 
 	camera_.UpdateMatrix();
+
+	DebugText::GetInstance()->ConsolePrintf("IsSettingChoice : %d\nIsOpenSetting : %d\n", isSettingChoice_,isOpenSetting_);
 }
 
 void TitleScene::Draw() {
@@ -142,6 +159,10 @@ void TitleScene::Draw() {
 		spriteCommands_->Draw();
 	}
 
+	if (isOpenSetting_) {
+		ui_->DrawGamePadConfig();
+	}
+
 	// 前景スプライト描画後処理
 	Sprite::PostDraw();
 }
@@ -170,49 +191,75 @@ void TitleScene::CameraMove() {
 }
 
 void TitleScene::SelectCommand() { 
-	bool isUpPressed = input->TriggerKey(DIK_UP) || (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP); 
-	bool isDownPressed = input->TriggerKey(DIK_DOWN) || (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN);
-	bool isRightPressed = input->TriggerKey(DIK_RIGHT) || (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT);
-	bool isLeftPressed = input->TriggerKey(DIK_LEFT) || (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT);
-	bool isSpacePressed = input->TriggerKey(DIK_SPACE);
-	bool isAButtonPressed = (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_A);
 
-	if (isUpPressed) {
-		commandNum_--;
-		if (commandNum_ < 1) {
-			commandNum_ = 3;
-		}
-	} else if (isDownPressed) {
-		commandNum_++;
-		if (commandNum_ > 3) {
-			commandNum_ = 1;
-		}
+	if (!isMove_ && !isOpenRule_ && !isOpenSetting_) {
+    	if (isUpPressed) {
+    		commandNum_--;
+    		if (commandNum_ < 1) {
+    			commandNum_ = 3;
+    		}
+    	} else if (isDownPressed) {
+    		commandNum_++;
+    		if (commandNum_ > 3) {
+    			commandNum_ = 1;
+    		}
+    	}
+
+    	if (isRightPressed || isLeftPressed) {
+    		if (!isSettingChoice_) {
+    			isSettingChoice_ = true;
+    		} else {
+    			isSettingChoice_ = false;
+    			commandNum_ = 1;
+    		}
+    	}
+
+    	if (isSpacePressed || isAButtonPressed) {
+    		if (!isSettingChoice_) {
+    			switch (commandNum_) {
+    			case 1: // Start
+    				isMove_ = true;
+    				break;
+    			case 2: // Rule
+    				isOpenRule_ = true;
+    				break;
+    			case 3: // Exit
+    				isExit_ = true;
+    				break;
+    			}
+    		} else {
+    			isOpenSetting_ = true;
+				justOpenedSetting_ = true;
+    		}
+    	}
 	}
+}
 
-	if (isRightPressed || isLeftPressed) {
-		if (!isSettingChoice_) {
-			isSettingChoice_ = true;
-		} else {
-			isSettingChoice_ = false;
-			commandNum_ = 1;
-		}
-	}
+void TitleScene::SetGamePadConfig() {
+	bool isChanged = false;
+	if (isOpenSetting_) {
+        ui_->UpdateGamePadConfig();
 
-	if (isSpacePressed || isAButtonPressed) {
-		if (!isSettingChoice_) {
-			switch (commandNum_) {
-			case 1: // Start
-				isMove_ = true;
-				break;
-			case 2: // Rule
-				isOpenRule_ = true;
-				break;
-			case 3: // Exit
-				isExit_ = true;
-				break;
+    	if (isLeftPressed || isRightPressed) {
+    		if (setting_->screwInputType_ == "AButton") {
+    			setting_->screwInputType_ = "Stick";
+    		} else if (setting_->screwInputType_ == "Stick") {
+    			setting_->screwInputType_ = "AButton";
+    		}
+    		isChanged = true;
+    	}
+
+    	// 変更があった時だけ保存
+    	if (isChanged) {
+        	setting_->Save();
+    	}
+ 
+        if (!justOpenedSetting_) {
+			if (isSpacePressed || isAButtonPressed) {
+				isOpenSetting_ = false;
 			}
 		} else {
-			isOpenSetting_ = true;
+			justOpenedSetting_ = false; // 1フレーム経過したら解除
 		}
 	}
 }

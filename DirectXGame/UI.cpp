@@ -3,6 +3,7 @@
 #include <algorithm>
 #include "Timer.h"
 #include "Objects/Rocket.h"
+#include "Setting.h"
 
 using namespace KamataEngine;
 
@@ -11,11 +12,14 @@ UI::~UI() {
 	delete tenDigitSprite_;
 	delete oneDigitSprite_;
 	delete meterSprite_;
+	delete counterSprite_;
+	delete gamePadConfigSprite_;
 }
 
-void UI::Initialize(Timer* timer, Rocket* rocket) { 
+void UI::InitializeGameUI(Timer* timer, Rocket* rocket) { 
 	timer_ = timer;
 	rocket_ = rocket;
+
 
 	//------------------------カウンター-------------------------------
 	// 数字テクスチャの読み込み
@@ -115,5 +119,28 @@ void UI::DrawCounter() {
     	counterSprite_->SetColor({1.0f, 1.0f, 1.0f, counterSpriteAlpha_});
         counterSprite_->Draw();
 	}
+}
 
+void UI::UpdateGamePadConfig() {
+	gamePadConfigSprite_->SetPosition({250.0f, 150.0f});
+	if (setting_->screwInputType_ == "AButton") {
+		gamePadConfigSprite_->SetTextureHandle(padConfigAButtonTexture);
+	} else if (setting_->screwInputType_ == "Stick") {
+		gamePadConfigSprite_->SetTextureHandle(padConfigStickTexture);
+	}
+}
+
+void UI::DrawGamePadConfig() { 
+	gamePadConfigSprite_->Draw(); 
+}
+
+void UI::InitializeTitleUI(Setting* setting) { 
+	setting_ = setting; 
+
+	//----------------------ゲームパッド設定表示-------------------------
+	padConfigAButtonTexture = TextureManager::Load("padConfigAButton.png");
+	padConfigStickTexture = TextureManager::Load("padConfigStick.png");
+
+	gamePadConfigSprite_ = Sprite::Create(padConfigAButtonTexture, {50.0f, 50.0f});
+	//-------------------------------------------------------------------
 }

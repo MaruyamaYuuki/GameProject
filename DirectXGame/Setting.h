@@ -7,6 +7,8 @@ public:
 	// 保存する内容
 	float bestRecord_ = 0.0f;
 	std::string screwInputType_ = "AButton";
+public:
+
 
 	// コンストラクタでロード
 	Setting(const std::string& filePath = "Resources/Config.json") 

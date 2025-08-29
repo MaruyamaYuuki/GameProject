@@ -4,6 +4,8 @@
 #include "../Objects/Screw.h"
 #include "../Objects/Skydome.h"
 #include "../Objects/Field.h"
+#include "../Setting.h"
+#include "../UI.h"
 
 class TitleScene {
 
@@ -21,6 +23,8 @@ public:
 	void CameraMove();
 
 	void SelectCommand();
+
+	void SetGamePadConfig();
 
 	bool IsOpenRule() const { return isOpenRule_; }
 
@@ -60,6 +64,10 @@ private:
 	Skydome* skydome_ = nullptr;
 
 	Field* field_ = nullptr;
+
+	Setting* setting_ = nullptr;
+
+	UI* ui_ = nullptr;
 	
 	bool isSettingChoice_ = false;
 	bool isMove_ = false;
@@ -67,10 +75,17 @@ private:
 	bool isExit_ = false;
 	bool isOpenSetting_ = false;
 	bool isFinished_ = false;
+	bool justOpenedSetting_ = false;
+
+	bool isUpPressed;
+	bool isDownPressed;
+	bool isRightPressed;
+	bool isLeftPressed;
+	bool isSpacePressed;
+	bool isAButtonPressed;
 
 	float spriteAlpha_ = 1.0f; // スプライトの透明度(初期値: 不透明)
 	float fadeSpeed_ = 0.02f;  // フェードアウト速度
 
 	int commandNum_ = 1;
-
 };

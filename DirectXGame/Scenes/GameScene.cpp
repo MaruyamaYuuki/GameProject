@@ -58,7 +58,7 @@ void GameScene::Initialize() {
 	field_->Initialize(modelField_);
 	// UIの初期化・生成
 	ui_ = new UI();
-	ui_->Initialize(timer_, rocket_);
+	ui_->InitializeGameUI(timer_, rocket_);
 	// カメラコントローラの初期化・生成
 	cameraController_ = new CameraController(); 
 	cameraController_->Initialize();            
