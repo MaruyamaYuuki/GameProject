@@ -7,6 +7,7 @@
 #include "../Objects/Skydome.h"
 #include "../Objects/Field.h"
 #include "../UI.h"
+#include "../Setting.h"
 
 class GameScene {
 public:
@@ -34,6 +35,8 @@ private:
 	KamataEngine::Model* modelSkydome_ = nullptr;
 	KamataEngine::Model* modelUniversedome_ = nullptr;
 	KamataEngine::Model* modelField_ = nullptr;
+
+	Setting* setting_ = nullptr;
 
 	Timer* timer_ = nullptr;
 	Screw* screw_ = nullptr;

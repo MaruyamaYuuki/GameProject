@@ -16,10 +16,10 @@ UI::~UI() {
 	delete gamePadConfigSprite_;
 }
 
-void UI::InitializeGameUI(Timer* timer, Rocket* rocket) { 
+void UI::InitializeGameUI(Timer* timer, Rocket* rocket, Setting* setting) { 
 	timer_ = timer;
 	rocket_ = rocket;
-
+	setting_ = setting;
 
 	//------------------------カウンター-------------------------------
 	// 数字テクスチャの読み込み
@@ -32,7 +32,7 @@ void UI::InitializeGameUI(Timer* timer, Rocket* rocket) {
 	//-----------------------------------------------------------------
 	
 	//----------------------スコア-------------------------------------
-	score_ = 0; 
+	record_ = 0; 
 	// 数字テクスチャの読み込み
 	for (int i = 0; i < 10; i++) {
 		std::string fileName = "numbers/record/" + std::to_string(i) + ".png";
@@ -47,24 +47,45 @@ void UI::InitializeGameUI(Timer* timer, Rocket* rocket) {
 	meterSprite_ = Sprite::Create(meterTexture, {50.0f, 50.0f});
 	//-------------------------------------------------------------------
 
+	//----------------------最高記録-------------------------------------
+	// 数字テクスチャの読み込み
+	for (int i = 0; i < 10; i++) {
+		std::string fileName = "numbers/bestRecord/" + std::to_string(i) + ".png";
+		bestRecordTextures[i] = TextureManager::Load(fileName.c_str());
+	}
+	bestRecordTextTexture = TextureManager::Load("numbers/bestRecord/bestRecord.png");
+
+	bestRecordHundredDigitSprite_ = Sprite::Create(bestRecordTextures[0], {50.0f, 50.0f});
+	bestRecordTenDigitSprite_ = Sprite::Create(bestRecordTextures[0], {50.0f, 50.0f});
+	bestRecordOneDigitSprite_ = Sprite::Create(bestRecordTextures[0], {50.0f, 50.0f});
+	bestRecordTextSprite_ = Sprite::Create(bestRecordTextTexture, {50.0f, 50.0f});
+
 }
+
+void UI::InitializeTitleUI(Setting* setting) { 
+	setting_ = setting; 
+
+	//----------------------ゲームパッド設定表示-------------------------
+	padConfigAButtonTexture = TextureManager::Load("padConfigAButton.png");
+	padConfigStickTexture = TextureManager::Load("padConfigStick.png");
+
+	gamePadConfigSprite_ = Sprite::Create(padConfigAButtonTexture, {50.0f, 50.0f});
+	//-------------------------------------------------------------------
+}
+
+// -----UIの更新-----
 
 void UI::Update() {
 	UpdateScore();
 	UpdateCounter();
 }
 
-void UI::Draw() { 
-    DrawScore();
-	DrawCounter();
- }
-
 void UI::UpdateScore() { 
-	score_ = int(rocket_->GetWorldTransform().translation_.y); 
+	record_ = int(rocket_->GetWorldTransform().translation_.y); 
 
-	int one = score_ % 10;
-	int ten = (score_ / 10) % 10;
-	int hundred = (score_ / 100) % 10;
+	int one = record_ % 10;
+	int ten = (record_ / 10) % 10;
+	int hundred = (record_ / 100) % 10;
 
 	hundredDigitSprite_->SetTextureHandle(recordTextures[hundred]);
 	tenDigitSprite_->SetTextureHandle(recordTextures[ten]);
@@ -76,25 +97,12 @@ void UI::UpdateScore() {
 	meterSprite_->SetPosition({720.0f, 555.0f});
 
 	if (rocket_->IsFiring()) {
-		if (scoreSpriteAlpha_ < 1.0f) {
-			scoreSpriteAlpha_ += fadeSpeed_;
-			if (scoreSpriteAlpha_ > 1.0f) {
-				scoreSpriteAlpha_ = 1.0f; // 負値にならないように固定
+		if (recordSpriteAlpha_ < 1.0f) {
+			recordSpriteAlpha_ += fadeSpeed_;
+			if (recordSpriteAlpha_ > 1.0f) {
+				recordSpriteAlpha_ = 1.0f; // 負値にならないように固定
 			}
 		}
-	}
-}
-
-void UI::DrawScore() {
-	if (rocket_->IsFiring()) {
-		hundredDigitSprite_->SetColor({1.0f, 1.0f, 1.0f, scoreSpriteAlpha_});
-        hundredDigitSprite_->Draw();
-		tenDigitSprite_->SetColor({1.0f, 1.0f, 1.0f, scoreSpriteAlpha_});
-        tenDigitSprite_->Draw();
-		oneDigitSprite_->SetColor({1.0f, 1.0f, 1.0f, scoreSpriteAlpha_});
-        oneDigitSprite_->Draw();
-		meterSprite_->SetColor({1.0f, 1.0f, 1.0f, scoreSpriteAlpha_});
-    	meterSprite_->Draw();
 	}
 }
 
@@ -114,10 +122,29 @@ void UI::UpdateCounter() {
 	}
 }
 
-void UI::DrawCounter() { 
-	if (timer_->IsScrewStart()) {
-    	counterSprite_->SetColor({1.0f, 1.0f, 1.0f, counterSpriteAlpha_});
-        counterSprite_->Draw();
+void UI::UpdateBestRecord() { 
+	bestRecord_ = int(setting_->bestRecord_); 
+
+	int one = bestRecord_ % 10;
+	int ten = (bestRecord_ / 10) % 10;
+	int hundred = (bestRecord_ / 100) % 10;
+
+	bestRecordHundredDigitSprite_->SetTextureHandle(recordTextures[hundred]);
+	bestRecordTenDigitSprite_->SetTextureHandle(recordTextures[ten]);
+	bestRecordOneDigitSprite_->SetTextureHandle(recordTextures[one]);
+
+	bestRecordHundredDigitSprite_->SetPosition({50.0f, 50.0f});
+	bestRecordTenDigitSprite_->SetPosition({100.0f, 50.0f});
+	bestRecordOneDigitSprite_->SetPosition({150.0f, 50.0f});
+	bestRecordTextSprite_->SetPosition({50.0f, 50.0f});
+
+	if (rocket_->IsDrawBestRecord()) {
+		if (bestRecordSpriteAlpha_ < 1.0f) {
+			bestRecordSpriteAlpha_ += fadeSpeed_;
+			if (bestRecordSpriteAlpha_ > 1.0f) {
+				bestRecordSpriteAlpha_ = 1.0f; // 負値にならないように固定
+			}
+		}
 	}
 }
 
@@ -130,17 +157,48 @@ void UI::UpdateGamePadConfig() {
 	}
 }
 
+// -----UIの描画-----
+
+void UI::Draw() { 
+    DrawScore();
+	DrawCounter();
+ }
+
+void UI::DrawScore() {
+	if (rocket_->IsFiring()) {
+		hundredDigitSprite_->SetColor({1.0f, 1.0f, 1.0f, recordSpriteAlpha_});
+        hundredDigitSprite_->Draw();
+		tenDigitSprite_->SetColor({1.0f, 1.0f, 1.0f, recordSpriteAlpha_});
+        tenDigitSprite_->Draw();
+		oneDigitSprite_->SetColor({1.0f, 1.0f, 1.0f, recordSpriteAlpha_});
+        oneDigitSprite_->Draw();
+		meterSprite_->SetColor({1.0f, 1.0f, 1.0f, recordSpriteAlpha_});
+    	meterSprite_->Draw();
+	}
+}
+
+void UI::DrawCounter() { 
+	if (timer_->IsScrewStart()) {
+    	counterSprite_->SetColor({1.0f, 1.0f, 1.0f, counterSpriteAlpha_});
+        counterSprite_->Draw();
+	}
+}
+
+void UI::DrawBestRecord() {
+	if (rocket_->IsDrawBestRecord()) {
+		bestRecordHundredDigitSprite_->SetColor({1.0f, 1.0f, 1.0f, bestRecordSpriteAlpha_});
+		bestRecordHundredDigitSprite_->Draw();
+		bestRecordTenDigitSprite_->SetColor({1.0f, 1.0f, 1.0f, bestRecordSpriteAlpha_});
+		bestRecordTenDigitSprite_->Draw();
+		bestRecordOneDigitSprite_->SetColor({1.0f, 1.0f, 1.0f, bestRecordSpriteAlpha_});
+		bestRecordOneDigitSprite_->Draw();
+		bestRecordTextSprite_->SetColor({1.0f, 1.0f, 1.0f, bestRecordSpriteAlpha_});
+		bestRecordTextSprite_->Draw();
+	}
+}
+
 void UI::DrawGamePadConfig() { 
 	gamePadConfigSprite_->Draw(); 
 }
 
-void UI::InitializeTitleUI(Setting* setting) { 
-	setting_ = setting; 
 
-	//----------------------ゲームパッド設定表示-------------------------
-	padConfigAButtonTexture = TextureManager::Load("padConfigAButton.png");
-	padConfigStickTexture = TextureManager::Load("padConfigStick.png");
-
-	gamePadConfigSprite_ = Sprite::Create(padConfigAButtonTexture, {50.0f, 50.0f});
-	//-------------------------------------------------------------------
-}

@@ -5,11 +5,12 @@
 
 class Screw;
 class Timer;
+class Setting;
 class Rocket {
 
 public:
 
-	void Initialize(KamataEngine::Model* model, KamataEngine::Input* input, Screw* screw , Timer* timer);
+	void Initialize(KamataEngine::Model* model, KamataEngine::Input* input, Screw* screw , Timer* timer, Setting* setting);
 
 	void Update();
 
@@ -23,11 +24,17 @@ public:
 
 	void Move();
 
+	void Reset();
+
 	const WorldTransformEx& GetWorldTransform() const { return worldTransform_; }
 
 	const KamataEngine::Vector3& GetVelocity() const { return velocity_; }
 
 	bool IsFiring() const { return isFiring_; }
+
+	bool IsDrawBestRecord() const { return isDrawBestRecord_; }
+
+	bool IsArrived() const { return isArrived; }
 
 private:
 	WorldTransformEx worldTransform_;
@@ -39,6 +46,8 @@ private:
 	KamataEngine::Vector3 velocity_ = {1.0f, 0.0f, 0.0f};
 
 	bool isFiring_ = false;
+	bool isDrawBestRecord_ = false;
+	bool isArrived = false;
 
 	float screwCount_ = 0;   // ネジを巻いた回数
 
@@ -47,8 +56,7 @@ private:
 
 	Screw* screw_ = nullptr;
 	Timer* timer_ = nullptr;
-
-	bool hit = false;
+	Setting* setting_ = nullptr;
 	
 	float rocketWidth = 1.0f; // ロケットの幅
 };

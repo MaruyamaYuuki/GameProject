@@ -39,6 +39,9 @@ void GameScene::Initialize() {
 	modelUniversedome_ = Model::CreateFromOBJ("universedome", true);
 	modelField_ = Model::CreateFromOBJ("field", true);
 
+	// 設定の初期化・読み込み
+	setting_ = new Setting();
+	setting_->Load();
 	// タイマーの初期化・生成
 	timer_ = new Timer();
 	timer_->Initialize();
@@ -47,7 +50,7 @@ void GameScene::Initialize() {
 	screw_->Initialize(modelScrew_, input,timer_);
 	// ロケットの初期化・生成
 	rocket_ = new Rocket();
-	rocket_->Initialize(modelRocket_, input, screw_, timer_);
+	rocket_->Initialize(modelRocket_, input, screw_, timer_, setting_);
 	// 天球の初期化・生成
 	universedome_ = new Skydome();
 	universedome_->Initialize(modelUniversedome_, universeSize_, &camera_);
@@ -58,7 +61,7 @@ void GameScene::Initialize() {
 	field_->Initialize(modelField_);
 	// UIの初期化・生成
 	ui_ = new UI();
-	ui_->InitializeGameUI(timer_, rocket_);
+	ui_->InitializeGameUI(timer_, rocket_,setting_);
 	// カメラコントローラの初期化・生成
 	cameraController_ = new CameraController(); 
 	cameraController_->Initialize();            

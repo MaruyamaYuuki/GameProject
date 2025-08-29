@@ -2,13 +2,14 @@
 #include "Rocket.h"
 #include "Screw.h"
 #include "../Timer.h"
+#include "../Setting.h"
 #include <cassert>
 #include <algorithm>
 
 using namespace KamataEngine;
 using namespace KamataEngine::MathUtility;
 
-void Rocket::Initialize(Model* model, Input* input, Screw* screw, Timer* timer) {
+void Rocket::Initialize(Model* model, Input* input, Screw* screw, Timer* timer, Setting* setting) {
 	assert(model);
 	model_ = model;
 	assert(input);
@@ -17,6 +18,8 @@ void Rocket::Initialize(Model* model, Input* input, Screw* screw, Timer* timer) 
 	this->screw_ = screw;
 	assert(timer);
 	this->timer_ = timer;
+	assert(setting);
+	this->setting_ = setting;
 
 	worldTransform_.Initialize();
 }
@@ -57,6 +60,7 @@ void Rocket::Firing() {
 		firingDistance_ = std::min(screwCount_ * distancePerScrew, maxFiringDistance_);
 
 		isFiring_ = true;
+		isDrawBestRecord_ = true;
 		velocity_.y = 0;
 
 		timer_->Reset();
@@ -77,9 +81,10 @@ void Rocket::Firing() {
 		if (worldTransform_.translation_.y >= firingDistance_) {
 			worldTransform_.translation_.y = firingDistance_;
 			isFiring_ = false;
+			isArrived = true;
 		}
 
-		Move();
+		//Move();
 	}
 }
 
@@ -114,4 +119,14 @@ void Rocket::Move() {
 
 	// 移動範囲を制限
 	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -20.0f, 20.0f);
+}
+
+void Rocket::Reset() {
+	isFiring_ = false;
+	isDrawBestRecord_ = false;
+	isArrived = false;
+	velocity_.y = 0;
+	screwCount_ = 0;
+	worldTransform_.translation_ = {0.0f, 0.0f, 0.0f};
+	setting_->UpdateBestRecord(firingDistance_);
 }
