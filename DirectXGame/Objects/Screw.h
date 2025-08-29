@@ -23,6 +23,8 @@ public:
 
 	void ScrewWinding();
 
+	void Reset();
+
 	float GetEnergy() { return energy_; }
 
 private:

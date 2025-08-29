@@ -20,7 +20,11 @@ void Screw::Initialize(Model* model, Input* input, Timer* timer) {
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = offsetFromRocket_;
 
-
+	energy_ = 0;
+	targetRotationX_ = 0.0f;
+	worldTransform_.rotation_.x = 0.0f;
+	accumulatedAngle_ = 0.0f;
+	previousStickAngle_ = 0.0f;
 }
 
 void Screw::Update() {
@@ -38,7 +42,6 @@ void Screw::Update() {
 
 	ScrewWinding();
 
-	DebugText::GetInstance()->ConsolePrintf("Energy : %f\n", energy_);
 	worldTransform_.UpdateMatrix();
 }
 
@@ -121,5 +124,13 @@ void Screw::ScrewWinding() {
 		// 角度保存
 		previousStickAngle_ = currentAngle;
 	}
+}
+
+void Screw::Reset() { 
+	energy_ = 0; 
+	targetRotationX_ = 0.0f;
+	worldTransform_.rotation_.x = 0.0f;
+	accumulatedAngle_ = 0.0f;
+	previousStickAngle_ = 0.0f;
 }
 

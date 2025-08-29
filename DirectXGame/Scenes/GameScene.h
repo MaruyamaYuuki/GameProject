@@ -22,9 +22,13 @@ public:
 
 	void Draw();
 
+	void FiringAfterSelect();
+
 	bool IsFinished() const { return isFinished_; }
 
 private:
+	XINPUT_STATE state, preState;
+
 	KamataEngine::DirectXCommon* dxCommon = nullptr;
 	KamataEngine::Input* input = nullptr;
 	KamataEngine::Camera camera_;
@@ -59,4 +63,6 @@ private:
 
 	KamataEngine::Vector3 skySize_ = {900.0f, 900.0f, 900.0f};
 	KamataEngine::Vector3 universeSize_{11000.0f, 11000.0f, 950.0f};
+
+	int selectNum_ = 1;
 };

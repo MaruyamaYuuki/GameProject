@@ -32,9 +32,13 @@ public:
 
 	bool IsFiring() const { return isFiring_; }
 
+	bool IsDrawRecords() const { return isDrawRecords_; }
+
 	bool IsDrawBestRecord() const { return isDrawBestRecord_; }
 
 	bool IsArrived() const { return isArrived; }
+
+	float GetRecord() const { return firingDistance_; }
 
 private:
 	WorldTransformEx worldTransform_;
@@ -46,8 +50,10 @@ private:
 	KamataEngine::Vector3 velocity_ = {1.0f, 0.0f, 0.0f};
 
 	bool isFiring_ = false;
+	bool isDrawRecords_ = false;
 	bool isDrawBestRecord_ = false;
 	bool isArrived = false;
+	bool isTimerStart_ = false;
 
 	float screwCount_ = 0;   // ネジを巻いた回数
 
@@ -59,4 +65,5 @@ private:
 	Setting* setting_ = nullptr;
 	
 	float rocketWidth = 1.0f; // ロケットの幅
+	float waitingTime_ = 60.0f; // 到達後の待機時間(フレーム)
 };

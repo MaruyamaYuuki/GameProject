@@ -23,6 +23,8 @@ public:
 	void UpdateBestRecord();
 
 	void UpdateGamePadConfig();
+	
+	void UpdateAfterSelect(int selectNum);
 
 	void Draw();
 
@@ -33,6 +35,10 @@ public:
 	void DrawBestRecord();
 
 	void DrawGamePadConfig();
+
+	void DrawAfterSelect();
+
+	void Reset();
 
 private:
 	WorldTransformEx worldTransform_;
@@ -53,6 +59,8 @@ private:
 	KamataEngine::Sprite* bestRecordTenDigitSprite_ = nullptr;
 	KamataEngine::Sprite* bestRecordTextSprite_ = nullptr;
 	KamataEngine::Sprite* gamePadConfigSprite_ = nullptr;
+	KamataEngine::Sprite* afterSelectSprite_ = nullptr;
+	KamataEngine::Sprite* newRecordSprite_ = nullptr;
 
 	uint32_t recordTextures[10];
 	uint32_t meterTexture = 0;
@@ -61,10 +69,13 @@ private:
 	uint32_t bestRecordTextTexture = 0;
 	uint32_t padConfigAButtonTexture = 0;
 	uint32_t padConfigStickTexture = 0;
+	uint32_t afterSelectToRetryTexture = 0;
+	uint32_t afterSelectToTitleTexture = 0;
+	uint32_t newRecordTexture = 0;
 
     // スプライトの透明度(初期値: 不透明)
 	float recordSpriteAlpha_ = 0.0f; 
-	float bestRecordSpriteAlpha_ = 1.0f;
+	float bestRecordSpriteAlpha_ = 0.0f;
 	float counterSpriteAlpha_ = 1.0f;
 	float fadeSpeed_ = 0.05f;  // フェードアウト速度
 };

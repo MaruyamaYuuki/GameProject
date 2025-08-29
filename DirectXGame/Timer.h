@@ -25,8 +25,6 @@ public:
 
 	bool IsScrewStart() { return isScrewStart; }
 
-	bool IsFiring() { return isFiring; }
-
 	float GetScrewTime() const { return screwTime; }
 
 	float GetFiringTime() const { return firingTime; }
@@ -42,8 +40,6 @@ private:
 	FiringState firingState_ = FiringState::Standby;
 
 	bool isScrewStart = false;
-
-	bool isFiring = false;
 
 	bool isCountStart = false;
 

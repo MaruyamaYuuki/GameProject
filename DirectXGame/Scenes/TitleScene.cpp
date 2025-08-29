@@ -31,12 +31,14 @@ void TitleScene::Initialize() {
 	camera_.translation_ = {0.0f, 0.0f, startDistance};
 
 	commandNum_ = 1;
+	spriteAlpha_ = 1.0f;
 	isSettingChoice_ = false;
 	isMove_ = false;
 	isOpenRule_ = false;
 	isExit_ = false;
 	isOpenSetting_ = false;
 	isFinished_ = false;
+	justOpenedSetting_ = false;
 
 	modelRocket_ = Model::CreateFromOBJ("rocket", true);
 	modelScrew_ = Model::CreateFromOBJ("screw", true);

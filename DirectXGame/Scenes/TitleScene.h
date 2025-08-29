@@ -60,13 +60,9 @@ private:
 
 	Screw* screw_ = nullptr;
 	Rocket* rocket_ = nullptr;
-
 	Skydome* skydome_ = nullptr;
-
 	Field* field_ = nullptr;
-
 	Setting* setting_ = nullptr;
-
 	UI* ui_ = nullptr;
 	
 	bool isSettingChoice_ = false;

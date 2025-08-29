@@ -14,6 +14,12 @@ UI::~UI() {
 	delete meterSprite_;
 	delete counterSprite_;
 	delete gamePadConfigSprite_;
+	delete bestRecordHundredDigitSprite_;
+	delete bestRecordTenDigitSprite_;
+	delete bestRecordOneDigitSprite_;
+	delete bestRecordTextSprite_;
+	delete afterSelectSprite_;
+	delete newRecordSprite_;
 }
 
 void UI::InitializeGameUI(Timer* timer, Rocket* rocket, Setting* setting) { 
@@ -48,6 +54,7 @@ void UI::InitializeGameUI(Timer* timer, Rocket* rocket, Setting* setting) {
 	//-------------------------------------------------------------------
 
 	//----------------------最高記録-------------------------------------
+	bestRecord_ = 0;
 	// 数字テクスチャの読み込み
 	for (int i = 0; i < 10; i++) {
 		std::string fileName = "numbers/bestRecord/" + std::to_string(i) + ".png";
@@ -59,6 +66,16 @@ void UI::InitializeGameUI(Timer* timer, Rocket* rocket, Setting* setting) {
 	bestRecordTenDigitSprite_ = Sprite::Create(bestRecordTextures[0], {50.0f, 50.0f});
 	bestRecordOneDigitSprite_ = Sprite::Create(bestRecordTextures[0], {50.0f, 50.0f});
 	bestRecordTextSprite_ = Sprite::Create(bestRecordTextTexture, {50.0f, 50.0f});
+	//-------------------------------------------------------------------
+
+	//----------------------リトライかタイトルかの選択-------------------
+	afterSelectToRetryTexture = TextureManager::Load("afterSelectToRetry.png");
+	afterSelectToTitleTexture = TextureManager::Load("afterSelectToTitle.png");
+	newRecordTexture = TextureManager::Load("newRecord.png");
+
+	afterSelectSprite_ = Sprite::Create(afterSelectToRetryTexture, {0.0f, 0.0f});
+	newRecordSprite_ = Sprite::Create(newRecordTexture, {0.0f, 0.0f});
+	//-------------------------------------------------------------------
 
 }
 
@@ -78,6 +95,7 @@ void UI::InitializeTitleUI(Setting* setting) {
 void UI::Update() {
 	UpdateScore();
 	UpdateCounter();
+	UpdateBestRecord();
 }
 
 void UI::UpdateScore() { 
@@ -96,7 +114,7 @@ void UI::UpdateScore() {
 	oneDigitSprite_->SetPosition({665.0f, 550.0f});
 	meterSprite_->SetPosition({720.0f, 555.0f});
 
-	if (rocket_->IsFiring()) {
+	if (rocket_->IsDrawRecords()) {
 		if (recordSpriteAlpha_ < 1.0f) {
 			recordSpriteAlpha_ += fadeSpeed_;
 			if (recordSpriteAlpha_ > 1.0f) {
@@ -108,6 +126,12 @@ void UI::UpdateScore() {
 
 void UI::UpdateCounter() { 
 	int num = int(timer_->GetScrewTime());
+
+	if (num < 0) {
+		num = 0;
+	}
+
+	DebugText::GetInstance()->ConsolePrintf("ScrewTime : %d\n", num);
 
 	counterSprite_->SetPosition({590.0f, 100.0f});
 	counterSprite_->SetTextureHandle(counterTextures[num]);
@@ -129,16 +153,16 @@ void UI::UpdateBestRecord() {
 	int ten = (bestRecord_ / 10) % 10;
 	int hundred = (bestRecord_ / 100) % 10;
 
-	bestRecordHundredDigitSprite_->SetTextureHandle(recordTextures[hundred]);
-	bestRecordTenDigitSprite_->SetTextureHandle(recordTextures[ten]);
-	bestRecordOneDigitSprite_->SetTextureHandle(recordTextures[one]);
+	bestRecordHundredDigitSprite_->SetTextureHandle(bestRecordTextures[hundred]);
+	bestRecordTenDigitSprite_->SetTextureHandle(bestRecordTextures[ten]);
+	bestRecordOneDigitSprite_->SetTextureHandle(bestRecordTextures[one]);
 
-	bestRecordHundredDigitSprite_->SetPosition({50.0f, 50.0f});
-	bestRecordTenDigitSprite_->SetPosition({100.0f, 50.0f});
-	bestRecordOneDigitSprite_->SetPosition({150.0f, 50.0f});
-	bestRecordTextSprite_->SetPosition({50.0f, 50.0f});
+	bestRecordHundredDigitSprite_->SetPosition({10.0f, 20.0f});
+	bestRecordTenDigitSprite_->SetPosition({60.0f, 20.0f});
+	bestRecordOneDigitSprite_->SetPosition({110.0f, 20.0f});
+	bestRecordTextSprite_->SetPosition({10.0f, 10.0f});
 
-	if (rocket_->IsDrawBestRecord()) {
+	if (rocket_->IsDrawRecords()) {
 		if (bestRecordSpriteAlpha_ < 1.0f) {
 			bestRecordSpriteAlpha_ += fadeSpeed_;
 			if (bestRecordSpriteAlpha_ > 1.0f) {
@@ -157,15 +181,25 @@ void UI::UpdateGamePadConfig() {
 	}
 }
 
+void UI::UpdateAfterSelect(int selectNum) {
+	if (selectNum == 1) {
+		afterSelectSprite_->SetTextureHandle(afterSelectToRetryTexture);
+	} else if (selectNum == 2) {
+		afterSelectSprite_->SetTextureHandle(afterSelectToTitleTexture);
+	}
+}
+
 // -----UIの描画-----
 
 void UI::Draw() { 
     DrawScore();
 	DrawCounter();
+	DrawBestRecord();
+	DrawAfterSelect();
  }
 
 void UI::DrawScore() {
-	if (rocket_->IsFiring()) {
+	if (rocket_->IsDrawRecords()) {
 		hundredDigitSprite_->SetColor({1.0f, 1.0f, 1.0f, recordSpriteAlpha_});
         hundredDigitSprite_->Draw();
 		tenDigitSprite_->SetColor({1.0f, 1.0f, 1.0f, recordSpriteAlpha_});
@@ -185,7 +219,7 @@ void UI::DrawCounter() {
 }
 
 void UI::DrawBestRecord() {
-	if (rocket_->IsDrawBestRecord()) {
+	if (rocket_->IsDrawRecords()) {
 		bestRecordHundredDigitSprite_->SetColor({1.0f, 1.0f, 1.0f, bestRecordSpriteAlpha_});
 		bestRecordHundredDigitSprite_->Draw();
 		bestRecordTenDigitSprite_->SetColor({1.0f, 1.0f, 1.0f, bestRecordSpriteAlpha_});
@@ -199,6 +233,24 @@ void UI::DrawBestRecord() {
 
 void UI::DrawGamePadConfig() { 
 	gamePadConfigSprite_->Draw(); 
+}
+
+void UI::DrawAfterSelect() {
+	if (rocket_->IsArrived()) {
+    	afterSelectSprite_->Draw();
+    	if (setting_->bestRecord_ < rocket_->GetRecord()) {
+    		newRecordSprite_->Draw();
+    	}
+	}
+
+}
+
+void UI::Reset() {
+	record_ = 0;
+	bestRecord_ = 0;
+	recordSpriteAlpha_ = 0.0f;
+	bestRecordSpriteAlpha_ = 1.0f;
+	counterSpriteAlpha_ = 1.0f;
 }
 
 

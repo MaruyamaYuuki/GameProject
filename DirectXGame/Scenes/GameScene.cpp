@@ -74,6 +74,11 @@ void GameScene::Initialize() {
 }
 
 void GameScene::Update() {
+	Input::GetInstance()->GetJoystickState(0, state);
+	Input::GetInstance()->GetJoystickStatePrevious(0, preState);
+	
+	FiringAfterSelect();
+
 	if (input->TriggerKey(DIK_S)) {
 		screwFlag = true;
 	}
@@ -95,7 +100,7 @@ void GameScene::Update() {
 	ui_->Update();
 
 	cameraController_->Update();
-	DebugText::GetInstance()->ConsolePrintf("Flag : %d\n", cameraController_->CameraZoomOuted());
+	DebugText::GetInstance()->ConsolePrintf("SelectNum : %d\n", selectNum_);
 
 	// カメラの処理
 	if (isDebugCameraActive_) {
@@ -155,4 +160,39 @@ void GameScene::Draw() {
 
 	// 前景スプライト描画後処理
 	Sprite::PostDraw();
+}
+
+void GameScene::FiringAfterSelect() {
+	bool isRightPressed = input->TriggerKey(DIK_RIGHT) || (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT);
+	bool isLeftPressed = input->TriggerKey(DIK_LEFT) || (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT);
+	bool isSpacePressed = input->TriggerKey(DIK_SPACE);
+	bool isAButtonPressed = (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_A);
+
+	if (rocket_->IsArrived()) {
+		if (isRightPressed || isLeftPressed) {
+			if (selectNum_ == 1) {
+				selectNum_ = 2;
+			} else {
+				selectNum_ = 1;
+			}
+		}
+
+		ui_->UpdateAfterSelect(selectNum_);
+
+		if (isSpacePressed || isAButtonPressed) {
+			switch (selectNum_) {
+			case 1:
+				// リトライ
+				timer_->Reset();
+				rocket_->Reset();
+				screw_->Reset();
+				ui_->Reset();
+				screwFlag = false;
+			case 2:
+				setting_->UpdateBestRecord(rocket_->GetRecord());
+				isFinished_ = true;
+				break;
+			}
+		}
+	}
 }

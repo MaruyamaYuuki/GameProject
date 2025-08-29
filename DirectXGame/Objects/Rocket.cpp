@@ -22,13 +22,18 @@ void Rocket::Initialize(Model* model, Input* input, Screw* screw, Timer* timer, 
 	this->setting_ = setting;
 
 	worldTransform_.Initialize();
+
+	isFiring_ = false;
+	isDrawBestRecord_ = false;
+	isArrived = false;
+	velocity_.y = 0;
+	screwCount_ = 0;
+	worldTransform_.translation_ = {0.0f, 0.0f, 0.0f};
 }
 
 void Rocket::Update() { 
 	Firing();
-	//Move();
-	DebugText::GetInstance()->ConsolePrintf("FiringDistance : %f\n", firingDistance_);
-	DebugText::GetInstance()->ConsolePrintf("Translation : %f\nVelocity.Y : %f", worldTransform_.translation_.y,velocity_.y);
+	DebugText::GetInstance()->ConsolePrintf("FiringDistance : %f\nTimerStart : %d\n", firingDistance_, isTimerStart_);
 
 	worldTransform_.UpdateMatrix(); 
 
@@ -60,10 +65,10 @@ void Rocket::Firing() {
 		firingDistance_ = std::min(screwCount_ * distancePerScrew, maxFiringDistance_);
 
 		isFiring_ = true;
-		isDrawBestRecord_ = true;
+		isDrawRecords_ = true;
 		velocity_.y = 0;
 
-		timer_->Reset();
+		//timer_->Reset();
 	}
 
 	if (isFiring_) {
@@ -81,10 +86,14 @@ void Rocket::Firing() {
 		if (worldTransform_.translation_.y >= firingDistance_) {
 			worldTransform_.translation_.y = firingDistance_;
 			isFiring_ = false;
-			isArrived = true;
+			isTimerStart_ = true;
 		}
-
 		//Move();
+	}
+	if (waitingTime_ > 0 && isTimerStart_) {
+		waitingTime_--;
+	} else if(waitingTime_<=0){
+		isArrived = true;
 	}
 }
 
@@ -122,11 +131,12 @@ void Rocket::Move() {
 }
 
 void Rocket::Reset() {
+	setting_->UpdateBestRecord(firingDistance_);
 	isFiring_ = false;
-	isDrawBestRecord_ = false;
+	isDrawRecords_ = false;
 	isArrived = false;
 	velocity_.y = 0;
 	screwCount_ = 0;
 	worldTransform_.translation_ = {0.0f, 0.0f, 0.0f};
-	setting_->UpdateBestRecord(firingDistance_);
+	firingDistance_ = 0;
 }
