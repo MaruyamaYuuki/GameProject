@@ -13,6 +13,7 @@ void Field::Initialize(Model* model) {
 
 	worldTransform_.Initialize();
 	worldTransform_.translation_.y -= 1.5f;
+
 }
 
 void Field::Update() { 

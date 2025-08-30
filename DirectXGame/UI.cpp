@@ -88,6 +88,12 @@ void UI::InitializeGameUI(Timer* timer, Rocket* rocket, Setting* setting) {
 void UI::InitializeTitleUI(Setting* setting) { 
 	setting_ = setting; 
 
+	//---------------------------ルール----------------------------------
+	ruleTexture = TextureManager::Load("rule.png");
+
+	ruleSprite_ = Sprite::Create(ruleTexture, {0.0f, 0.0f});
+	//-------------------------------------------------------------------
+	
 	//----------------------ゲームパッド設定表示-------------------------
 	padConfigAButtonTexture = TextureManager::Load("padConfigAButton.png");
 	padConfigStickTexture = TextureManager::Load("padConfigStick.png");
@@ -98,7 +104,7 @@ void UI::InitializeTitleUI(Setting* setting) {
 
 // -----UIの更新-----
 
-void UI::Update() {
+void UI::UpdateGameUI() {
 	UpdateScrewWait();
 	UpdateScore();
 	UpdateCounter();
@@ -213,7 +219,7 @@ void UI::UpdateAfterSelect(int selectNum) {
 
 // -----UIの描画-----
 
-void UI::Draw() { 
+void UI::DrawGameUI() { 
 	DrawScrewWait();
     DrawScore();
 	DrawCounter();
@@ -263,6 +269,10 @@ void UI::DrawBestRecord() {
 
 void UI::DrawGamePadConfig() { 
 	gamePadConfigSprite_->Draw(); 
+}
+
+void UI::DrawRule() {
+		ruleSprite_->Draw();
 }
 
 void UI::DrawAfterSelect() {

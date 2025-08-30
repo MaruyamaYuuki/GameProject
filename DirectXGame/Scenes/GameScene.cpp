@@ -97,7 +97,7 @@ void GameScene::Update() {
 	screw_->Update();
 	rocket_->Update();
 
-	ui_->Update();
+	ui_->UpdateGameUI();
 
 	cameraController_->Update();
 	DebugText::GetInstance()->ConsolePrintf("SelectNum : %d\n", selectNum_);
@@ -156,7 +156,7 @@ void GameScene::Draw() {
 
 	// 前景スプライト描画前処理
 	Sprite::PreDraw(dxCommon->GetCommandList());
-	ui_->Draw();
+	ui_->DrawGameUI();
 
 
 switch (afterSelectState_) {

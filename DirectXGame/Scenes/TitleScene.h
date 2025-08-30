@@ -54,7 +54,6 @@ private:
 	KamataEngine::Model* modelScrew_ = nullptr;
 	KamataEngine::Model* modelSkydome_ = nullptr;
 	KamataEngine::Model* modelField_ = nullptr;
-
 	KamataEngine::Sprite* spriteTitle_ = nullptr;
 	KamataEngine::Sprite* spriteCommands_ = nullptr;
 
@@ -78,7 +77,7 @@ private:
 	bool isExit_ = false;
 	bool isOpenSetting_ = false;
 	bool isFinished_ = false;
-	bool justOpenedSetting_ = false;
+	bool justOpened_ = false;
 
 	bool isUpPressed;
 	bool isDownPressed;

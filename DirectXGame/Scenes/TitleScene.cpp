@@ -39,7 +39,6 @@ void TitleScene::Initialize() {
 	isExit_ = false;
 	isOpenSetting_ = false;
 	isFinished_ = false;
-	justOpenedSetting_ = false;
 
 	modelRocket_ = Model::CreateFromOBJ("rocket", true);
 	modelScrew_ = Model::CreateFromOBJ("screw", true);
@@ -117,6 +116,16 @@ void TitleScene::Update() {
 		}
 	}
 
+	if (isOpenRule_) {
+		if (!justOpened_) {
+			if (isSpacePressed || isAButtonPressed) {
+				isOpenRule_ = false;
+			}
+		} else {
+			justOpened_ = false; // 1フレーム経過したら解除
+		}
+	}
+
 	SetGamePadConfig();
 
 	skydome_->Update();
@@ -174,6 +183,10 @@ void TitleScene::Draw() {
 			spriteCommands_->SetTextureHandle(textureHandleSetting_);
 		}
 		spriteCommands_->Draw();
+	}
+
+	if (isOpenRule_) {
+		ui_->DrawRule();
 	}
 
 	if (isOpenSetting_) {
@@ -240,6 +253,7 @@ void TitleScene::SelectCommand() {
     				break;
     			case 2: // Rule
     				isOpenRule_ = true;
+					justOpened_ = true;
     				break;
     			case 3: // Exit
     				isExit_ = true;
@@ -247,7 +261,7 @@ void TitleScene::SelectCommand() {
     			}
     		} else {
     			isOpenSetting_ = true;
-				justOpenedSetting_ = true;
+				justOpened_ = true;
     		}
     	}
 	}
@@ -272,12 +286,12 @@ void TitleScene::SetGamePadConfig() {
         	setting_->Save();
     	}
  
-        if (!justOpenedSetting_) {
+        if (!justOpened_) {
 			if (isSpacePressed || isAButtonPressed) {
 				isOpenSetting_ = false;
 			}
 		} else {
-			justOpenedSetting_ = false; // 1フレーム経過したら解除
+			justOpened_ = false; // 1フレーム経過したら解除
 		}
 	}
 }

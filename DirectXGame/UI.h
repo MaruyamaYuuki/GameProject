@@ -14,7 +14,7 @@ public:
 
 	void InitializeTitleUI(Setting* setting);
 
-	void Update();
+	void UpdateGameUI();
 
 	void UpdateScrewWait();
 
@@ -28,7 +28,7 @@ public:
 	
 	void UpdateAfterSelect(int selectNum);
 
-	void Draw();
+	void DrawGameUI();
 
 	void DrawScrewWait();
 
@@ -39,6 +39,8 @@ public:
 	void DrawBestRecord();
 
 	void DrawGamePadConfig();
+
+	void DrawRule();
 
 	void DrawAfterSelect();
 
@@ -66,6 +68,7 @@ private:
 	KamataEngine::Sprite* gamePadConfigSprite_ = nullptr;
 	KamataEngine::Sprite* afterSelectSprite_ = nullptr;
 	KamataEngine::Sprite* newRecordSprite_ = nullptr;
+	KamataEngine::Sprite* ruleSprite_ = nullptr;
 
 	uint32_t screwStartTexture = 0;
 	uint32_t recordTextures[10];
@@ -78,6 +81,7 @@ private:
 	uint32_t afterSelectToRetryTexture = 0;
 	uint32_t afterSelectToTitleTexture = 0;
 	uint32_t newRecordTexture = 0;
+	uint32_t ruleTexture = 0;
 
     // スプライトの透明度(初期値: 不透明)
 	float screwStartAlpha_ = 0.5f;
