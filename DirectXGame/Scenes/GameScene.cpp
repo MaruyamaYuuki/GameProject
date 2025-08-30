@@ -99,6 +99,9 @@ void GameScene::Update() {
 
 	ui_->Update();
 
+	fade_ = new Fade();
+	fade_->Initialize();
+
 	cameraController_->Update();
 	DebugText::GetInstance()->ConsolePrintf("SelectNum : %d\n", selectNum_);
 
@@ -158,6 +161,8 @@ void GameScene::Draw() {
 	Sprite::PreDraw(dxCommon->GetCommandList());
 	ui_->Draw();
 
+	fade_->Draw();
+
 	// 前景スプライト描画後処理
 	Sprite::PostDraw();
 }
@@ -183,17 +188,44 @@ void GameScene::FiringAfterSelect() {
 			switch (selectNum_) {
 			case 1:
 				// リトライ
-				timer_->Reset();
-				rocket_->Reset();
-				screw_->Reset();
-				ui_->Reset();
-				screwFlag = false;
+				fade_->Start(Fade::Status::FadeOut, 1.0f);
+				afterSelectState_ = AfterSelectState::FadeOutToRetry;
 				break;
 			case 2:
 				setting_->UpdateBestRecord(rocket_->GetRecord());
-				isFinished_ = true;
+				fade_->Start(Fade::Status::FadeOut, 1.0f);
+				afterSelectState_ = AfterSelectState::FadeOutToTitle;
 				break;
 			}
 		}
+	}
+
+	switch (afterSelectState_) {
+	case GameScene::AfterSelectState::FadeOutToRetry:
+		fade_->Update();
+		if (fade_->IsFinished()) {
+			// リセット
+			timer_->Reset();
+			rocket_->Reset();
+			screw_->Reset();
+			ui_->Reset();
+			screwFlag = false;
+
+			// フェードイン開始
+			fade_->Start(Fade::Status::FadeIn, 1.0f);
+			afterSelectState_ = AfterSelectState::FadeInRetry;
+		}
+		break;
+	case GameScene::AfterSelectState::FadeInRetry:
+		fade_->Update();
+		if (fade_->IsFinished()) {
+			afterSelectState_ = AfterSelectState::None;
+		}
+		break;
+	case GameScene::AfterSelectState::FadeOutToTitle:
+		if (fade_->IsFinished()) {
+			isFinished_ = true;
+		}
+		break;
 	}
 }

@@ -8,8 +8,17 @@
 #include "../Objects/Field.h"
 #include "../UI.h"
 #include "../Setting.h"
+#include "../Fade.h"
 
 class GameScene {
+public:
+	enum class AfterSelectState {
+		None,
+		FadeOutToRetry,
+		FadeInRetry,
+		FadeOutToTitle,
+	};
+
 public:
 
 	GameScene();
@@ -54,6 +63,8 @@ private:
 
 	UI* ui_ = nullptr;
 
+	Fade* fade_ = nullptr;
+
 	bool screwFlag = false;
 
 	bool isFinished_ = false;
@@ -65,4 +76,6 @@ private:
 	KamataEngine::Vector3 universeSize_{11000.0f, 11000.0f, 950.0f};
 
 	int selectNum_ = 1;
+
+	AfterSelectState afterSelectState_ = AfterSelectState::None;
 };

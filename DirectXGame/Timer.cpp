@@ -41,7 +41,7 @@ void Timer::FiringCountTimer() {
 
 void Timer::Reset() {
 
-	screwTime = 10.0f; // 10秒
+	screwTime = 10.9f; // 10秒
 
 	firingTime = 3.0f; // 3秒
 

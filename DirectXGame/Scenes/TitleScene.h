@@ -6,8 +6,14 @@
 #include "../Objects/Field.h"
 #include "../Setting.h"
 #include "../UI.h"
+#include "../Fade.h"
 
 class TitleScene {
+public:
+	enum class Phase {
+		kFadeIn,
+		kMain,
+	};
 
 public:
 	TitleScene();
@@ -64,6 +70,7 @@ private:
 	Field* field_ = nullptr;
 	Setting* setting_ = nullptr;
 	UI* ui_ = nullptr;
+	Fade* fade_ = nullptr;
 	
 	bool isSettingChoice_ = false;
 	bool isMove_ = false;
@@ -82,6 +89,9 @@ private:
 
 	float spriteAlpha_ = 1.0f; // スプライトの透明度(初期値: 不透明)
 	float fadeSpeed_ = 0.02f;  // フェードアウト速度
+	float fadeTime_ = 3.0f;
 
 	int commandNum_ = 1;
+
+	Phase phase_ = Phase::kFadeIn;
 };

@@ -12,6 +12,7 @@ TitleScene::~TitleScene() {
 	delete field_;
 	delete setting_;
 	delete ui_;
+	delete fade_;
 
 	delete modelRocket_;
 	delete modelScrew_;
@@ -62,6 +63,9 @@ void TitleScene::Initialize() {
 	ui_ = new UI();
 	ui_->InitializeTitleUI(setting_);
 
+	fade_ = new Fade();
+	fade_->Initialize();
+	fade_->Start(Fade::Status::FadeIn, fadeTime_);
 
 	textureHandleTitle_ = TextureManager::Load("title.png");
 	textureHandleStart_ = TextureManager::Load("commands/startCommand.png");
@@ -88,7 +92,20 @@ void TitleScene::Update() {
 	isSpacePressed = input->TriggerKey(DIK_SPACE);
 	isAButtonPressed = (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_A);
 
-	SelectCommand();
+	switch (phase_) {
+	case TitleScene::Phase::kFadeIn:
+		fade_->Update();
+		if (fade_->IsFinished()) {
+			fade_->Stop();
+			phase_ = Phase::kMain;
+		}
+		break;
+	case TitleScene::Phase::kMain:
+    	SelectCommand();
+		break;
+	}
+
+
 
     // フェードアウト処理
 	if (isMove_) {
@@ -110,8 +127,6 @@ void TitleScene::Update() {
 	CameraMove();
 
 	camera_.UpdateMatrix();
-
-	DebugText::GetInstance()->ConsolePrintf("IsSettingChoice : %d\nIsOpenSetting : %d\n", isSettingChoice_,isOpenSetting_);
 }
 
 void TitleScene::Draw() {
@@ -165,6 +180,7 @@ void TitleScene::Draw() {
 		ui_->DrawGamePadConfig();
 	}
 
+	fade_->Draw();
 	// 前景スプライト描画後処理
 	Sprite::PostDraw();
 }

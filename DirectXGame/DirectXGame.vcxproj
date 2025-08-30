@@ -107,6 +107,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CameraController.cpp" />
+    <ClCompile Include="Fade.cpp" />
     <ClCompile Include="Objects\Field.cpp" />
     <ClCompile Include="Scenes\GameScene.cpp" />
     <ClCompile Include="main.cpp" />
@@ -196,6 +197,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraController.h" />
+    <ClInclude Include="Fade.h" />
     <ClInclude Include="Objects\Field.h" />
     <ClInclude Include="Scenes\GameScene.h" />
     <ClInclude Include="Objects\Rocket.h" />
