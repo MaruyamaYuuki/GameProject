@@ -101,9 +101,18 @@ void UI::Update() {
 void UI::UpdateScore() { 
 	record_ = int(rocket_->GetWorldTransform().translation_.y); 
 
-	int one = record_ % 10;
-	int ten = (record_ / 10) % 10;
-	int hundred = (record_ / 100) % 10;
+    int one = 0;
+	int ten = 0;
+	int hundred = 0;
+
+	if (record_ == 0) {
+		// 全部0に固定
+		one = ten = hundred = 0;
+	} else {
+		one = record_ % 10;
+		ten = (record_ / 10) % 10;
+		hundred = (record_ / 100) % 10;
+	}
 
 	hundredDigitSprite_->SetTextureHandle(recordTextures[hundred]);
 	tenDigitSprite_->SetTextureHandle(recordTextures[ten]);

@@ -24,11 +24,13 @@ void Rocket::Initialize(Model* model, Input* input, Screw* screw, Timer* timer, 
 	worldTransform_.Initialize();
 
 	isFiring_ = false;
-	isDrawBestRecord_ = false;
+	isDrawRecords_ = false;
+	isTimerStart_ = false;
 	isArrived = false;
 	velocity_.y = 0;
 	screwCount_ = 0;
 	worldTransform_.translation_ = {0.0f, 0.0f, 0.0f};
+	waitingTime_ = 120.0f;
 }
 
 void Rocket::Update() { 
@@ -134,9 +136,11 @@ void Rocket::Reset() {
 	setting_->UpdateBestRecord(firingDistance_);
 	isFiring_ = false;
 	isDrawRecords_ = false;
+	isTimerStart_ = false;
 	isArrived = false;
 	velocity_.y = 0;
 	screwCount_ = 0;
 	worldTransform_.translation_ = {0.0f, 0.0f, 0.0f};
 	firingDistance_ = 0;
+	waitingTime_ = 120.0f;
 }

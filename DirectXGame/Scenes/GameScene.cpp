@@ -188,6 +188,7 @@ void GameScene::FiringAfterSelect() {
 				screw_->Reset();
 				ui_->Reset();
 				screwFlag = false;
+				break;
 			case 2:
 				setting_->UpdateBestRecord(rocket_->GetRecord());
 				isFinished_ = true;
