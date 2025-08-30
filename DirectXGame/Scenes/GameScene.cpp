@@ -94,9 +94,6 @@ void GameScene::Update() {
 
 	timer_->Update();
 
-	timer_->ScrewTimer(screwFlag);
-	timer_->FiringCountTimer();
-
 	screw_->Update();
 	rocket_->Update();
 
@@ -228,6 +225,7 @@ void GameScene::FiringAfterSelect() {
 		fade_->Update();
 		if (fade_->IsFinished()) {
 			afterSelectState_ = AfterSelectState::None;
+			timer_->SetTimerState(Timer::State::WaitScrew);
 		}
 		break;
 	case GameScene::AfterSelectState::FadeOutToTitle:

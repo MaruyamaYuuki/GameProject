@@ -16,6 +16,8 @@ public:
 
 	void Update();
 
+	void UpdateScrewWait();
+
 	void UpdateScore();
 
 	void UpdateCounter();
@@ -27,6 +29,8 @@ public:
 	void UpdateAfterSelect(int selectNum);
 
 	void Draw();
+
+	void DrawScrewWait();
 
 	void DrawScore();
 
@@ -49,6 +53,7 @@ private:
 	int record_ = 0;
 	int bestRecord_ = 0;
 
+	KamataEngine::Sprite* screwStartSprite_ = nullptr;
 	KamataEngine::Sprite* oneDigitSprite_ = nullptr;
 	KamataEngine::Sprite* tenDigitSprite_ = nullptr;
 	KamataEngine::Sprite* hundredDigitSprite_ = nullptr;
@@ -62,6 +67,7 @@ private:
 	KamataEngine::Sprite* afterSelectSprite_ = nullptr;
 	KamataEngine::Sprite* newRecordSprite_ = nullptr;
 
+	uint32_t screwStartTexture = 0;
 	uint32_t recordTextures[10];
 	uint32_t meterTexture = 0;
 	uint32_t counterTextures[11];
@@ -74,6 +80,7 @@ private:
 	uint32_t newRecordTexture = 0;
 
     // スプライトの透明度(初期値: 不透明)
+	float screwStartAlpha_ = 0.5f;
 	float recordSpriteAlpha_ = 0.0f; 
 	float bestRecordSpriteAlpha_ = 0.0f;
 	float counterSpriteAlpha_ = 1.0f;

@@ -8,30 +8,44 @@ public:
 		Firing,
 	};
 
+	enum class State {
+		None,
+		WaitScrew,  // ネジ巻き待機
+		Screw,      // ネジ巻き中
+		Firing,     // 発射カウントダウン
+		Finished    // 完了
+	};
+
 public:
 	void Initialize();
 
 	void Update();
 
-	void Draw();
-
-	void ScrewTimer(bool isFlag);
-
-	void FiringCountTimer();
-
 	void Reset();
 
-	FiringState GetFiringState() const { return firingState_; }
-
-	bool IsScrewStart() { return isScrewStart; }
+	float GetScrewWaitTime() const { return screwWait; }
 
 	float GetScrewTime() const { return screwTime; }
 
 	float GetFiringTime() const { return firingTime; }
 
+	State GetTimerState() const { return state_; }
+
+	void SetTimerState(State state) { state_ = state; }
+
+private:
+
+	void UpdateWaitScrew();
+
+	void UpdateScrew();
+
+	void UpdateFiring();
+
 private:
 
 	const float deltaTime = 1.0f / 60.0f;
+
+	float screwWait = 4.0f;
 
 	float screwTime = 10.0f; // 10秒
 
@@ -39,8 +53,5 @@ private:
 
 	FiringState firingState_ = FiringState::Standby;
 
-	bool isScrewStart = false;
-
-	bool isCountStart = false;
-
+	State state_ = State::None;
 };

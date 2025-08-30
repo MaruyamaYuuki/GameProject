@@ -65,8 +65,7 @@ void Screw::UpdateOnlyModel() {
 
 void Screw::ScrewWinding() {
 	// ネジ開始タイミングでのみ処理
-	if (!timer_->IsScrewStart())
-		return;
+	if (timer_->GetTimerState() != Timer::State::Screw)return;
 
 	float deltaAngle = 0.0f; // 角度差を格納する変数
 

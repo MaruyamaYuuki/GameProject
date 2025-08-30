@@ -27,6 +27,12 @@ void UI::InitializeGameUI(Timer* timer, Rocket* rocket, Setting* setting) {
 	rocket_ = rocket;
 	setting_ = setting;
 
+	//------------------------ネジ巻き開始合図-------------------------
+	screwStartTexture = TextureManager::Load("screwStart.png");
+
+	screwStartSprite_ = Sprite::Create(screwStartTexture, {0.0f, 0.0f});
+	//-----------------------------------------------------------------
+
 	//------------------------カウンター-------------------------------
 	// 数字テクスチャの読み込み
 	for (int i = 0; i < 11; i++) {
@@ -93,9 +99,16 @@ void UI::InitializeTitleUI(Setting* setting) {
 // -----UIの更新-----
 
 void UI::Update() {
+	UpdateScrewWait();
 	UpdateScore();
 	UpdateCounter();
 	UpdateBestRecord();
+}
+
+void UI::UpdateScrewWait() {
+	if (timer_->GetScrewWaitTime() <= 1.0f) {
+		screwStartAlpha_ = 1.0f;
+	}
 }
 
 void UI::UpdateScore() { 
@@ -201,11 +214,19 @@ void UI::UpdateAfterSelect(int selectNum) {
 // -----UIの描画-----
 
 void UI::Draw() { 
+	DrawScrewWait();
     DrawScore();
 	DrawCounter();
 	DrawBestRecord();
 	DrawAfterSelect();
- }
+}
+
+void UI::DrawScrewWait() {
+	if (timer_->GetTimerState() == Timer::State::WaitScrew) {
+		screwStartSprite_->SetColor({1.0f, 1.0f, 1.0f, screwStartAlpha_});
+		screwStartSprite_->Draw();
+	}
+}
 
 void UI::DrawScore() {
 	if (rocket_->IsDrawRecords()) {
@@ -221,7 +242,7 @@ void UI::DrawScore() {
 }
 
 void UI::DrawCounter() { 
-	if (timer_->IsScrewStart()) {
+	if (timer_->GetTimerState() == Timer::State::Screw) {
     	counterSprite_->SetColor({1.0f, 1.0f, 1.0f, counterSpriteAlpha_});
         counterSprite_->Draw();
 	}
@@ -255,6 +276,7 @@ void UI::DrawAfterSelect() {
 }
 
 void UI::Reset() {
+	screwStartAlpha_ = 0.5f;
 	record_ = 0;
 	bestRecord_ = 0;
 	recordSpriteAlpha_ = 0.0f;

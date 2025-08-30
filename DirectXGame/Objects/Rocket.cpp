@@ -62,13 +62,15 @@ void Rocket::Firing() {
 	const float vMax = 3.5f;    // 最大速度
 	const float distancePerScrew = 8.0f;
 
-	if (timer_->GetFiringState() == Timer::FiringState::ReadyToFire) {
+	if (timer_->GetTimerState() == Timer::State::Finished){
 		// ネジを巻いた回数に応じて距離を決定
 		firingDistance_ = std::min(screwCount_ * distancePerScrew, maxFiringDistance_);
 
 		isFiring_ = true;
 		isDrawRecords_ = true;
 		velocity_.y = 0;
+
+		timer_->SetTimerState(Timer::State::None);
 
 		//timer_->Reset();
 	}

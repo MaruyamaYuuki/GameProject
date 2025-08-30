@@ -4,45 +4,54 @@
 using namespace KamataEngine;
 
 void Timer::Initialize() {
+	screwWait = 4.0f;
 	screwTime = 10.9f; // 10秒
-
 	firingTime = 3.0f; // 3秒
 
-	isScrewStart = false;
-	isCountStart = false;
+	state_ = State::WaitScrew;
 }
 
-void Timer::Update() { DebugText::GetInstance()->ConsolePrintf("ScrewTime : %f\nisScrewStart : %d\n", screwTime, isScrewStart); }
-
-void Timer::Draw() {}
-
-void Timer::ScrewTimer(bool isFlag) {
-	if (screwTime > 0.0f && isFlag) {
-		screwTime -= deltaTime;
-		isScrewStart = true;
-	} else if (screwTime <= 0){
-		screwTime = 0;
-		isScrewStart = false;
-		isCountStart = true;
-	}
-}
-
-void Timer::FiringCountTimer() {
-	if (firingState_ == FiringState::Standby && isCountStart) {
-		firingTime -= deltaTime;
-
-		if (firingTime <= 0.0f) {
-			firingState_ = FiringState::ReadyToFire;
-			isScrewStart = false;
-			isCountStart = false;
-		}
+void Timer::Update() {
+	switch (state_) {
+	case Timer::State::WaitScrew:
+		UpdateWaitScrew();
+		break;
+	case Timer::State::Screw:
+		UpdateScrew();
+		break;
+	case Timer::State::Firing:
+		UpdateFiring();
+		break;
 	}
 }
 
 void Timer::Reset() {
+	screwWait = 4.0f;
 	screwTime = 10.9f; // 10秒
 	firingTime = 3.0f; // 3秒
 	firingState_ = FiringState::Standby;
-	isScrewStart = false;
-	isCountStart = false;
+}
+
+void Timer::UpdateWaitScrew() {
+	screwWait -= deltaTime;
+	if (screwWait <= 0) {
+		screwWait = 0;
+		state_ = State::Screw;
+	}
+}
+
+void Timer::UpdateScrew() {
+	screwTime -= deltaTime;
+	if (screwTime <= 0) {
+		screwTime = 0;
+		state_ = State::Firing;
+	}
+}
+
+void Timer::UpdateFiring() {
+	firingTime -= deltaTime;
+	if (firingTime <= 0) {
+		firingTime = 0;
+		state_ = State::Finished;
+	}
 }
