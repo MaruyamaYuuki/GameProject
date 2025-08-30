@@ -18,8 +18,7 @@ void CameraController::Update() {
 	// 追従対象とオフセットからカメラの目標座標を計算
 	goalPos = targetWorldTransform.translation_ + targetOffset_ + targetVelocity * kVelocityBias;
 
-    // 座標補間によりゆったり追従（YやZだけ補間）
-	camera_.translation_.y = Lerp(camera_.translation_.y, goalPos.y, kInterpolationRate);
+	camera_.translation_.y = targetWorldTransform.translation_.y + targetOffset_.y;
 
 	// 追従対象が画面外に出ないように補正
 	camera_.translation_.y = std::max(camera_.translation_.y, targetWorldTransform.translation_.y + kMargin.bottom);
