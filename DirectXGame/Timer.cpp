@@ -17,7 +17,7 @@ void Timer::Update() { DebugText::GetInstance()->ConsolePrintf("ScrewTime : %f\n
 void Timer::Draw() {}
 
 void Timer::ScrewTimer(bool isFlag) {
-	if (screwTime >= 0.0f && isFlag) {
+	if (screwTime > 0.0f && isFlag) {
 		screwTime -= deltaTime;
 		isScrewStart = true;
 	} else if (screwTime <= 0){
@@ -40,13 +40,9 @@ void Timer::FiringCountTimer() {
 }
 
 void Timer::Reset() {
-
 	screwTime = 10.9f; // 10秒
-
 	firingTime = 3.0f; // 3秒
-
 	firingState_ = FiringState::Standby;
-
 	isScrewStart = false;
 	isCountStart = false;
 }

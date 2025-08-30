@@ -89,7 +89,7 @@ private:
 
 	float spriteAlpha_ = 1.0f; // スプライトの透明度(初期値: 不透明)
 	float fadeSpeed_ = 0.02f;  // フェードアウト速度
-	float fadeTime_ = 3.0f;
+	float fadeTime_ = 0.5f;
 
 	int commandNum_ = 1;
 

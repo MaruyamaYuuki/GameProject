@@ -42,6 +42,8 @@ void Screw::Update() {
 
 	ScrewWinding();
 
+	DebugText::GetInstance()->ConsolePrintf("Energy : %f\n", energy_);
+
 	worldTransform_.UpdateMatrix();
 }
 

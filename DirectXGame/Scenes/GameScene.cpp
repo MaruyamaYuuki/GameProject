@@ -62,6 +62,9 @@ void GameScene::Initialize() {
 	// UIの初期化・生成
 	ui_ = new UI();
 	ui_->InitializeGameUI(timer_, rocket_,setting_);
+	// フェードの初期化・生成
+	fade_ = new Fade();
+	fade_->Initialize();
 	// カメラコントローラの初期化・生成
 	cameraController_ = new CameraController(); 
 	cameraController_->Initialize();            
@@ -98,9 +101,6 @@ void GameScene::Update() {
 	rocket_->Update();
 
 	ui_->Update();
-
-	fade_ = new Fade();
-	fade_->Initialize();
 
 	cameraController_->Update();
 	DebugText::GetInstance()->ConsolePrintf("SelectNum : %d\n", selectNum_);
@@ -161,7 +161,15 @@ void GameScene::Draw() {
 	Sprite::PreDraw(dxCommon->GetCommandList());
 	ui_->Draw();
 
-	fade_->Draw();
+
+switch (afterSelectState_) {
+	case GameScene::AfterSelectState::FadeOutToRetry:
+	case GameScene::AfterSelectState::FadeInRetry:
+	case GameScene::AfterSelectState::FadeOutToTitle:
+		fade_->Draw();
+		break;
+	}
+
 
 	// 前景スプライト描画後処理
 	Sprite::PostDraw();
@@ -223,6 +231,7 @@ void GameScene::FiringAfterSelect() {
 		}
 		break;
 	case GameScene::AfterSelectState::FadeOutToTitle:
+		fade_->Update();
 		if (fade_->IsFinished()) {
 			isFinished_ = true;
 		}
