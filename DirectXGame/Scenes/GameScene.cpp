@@ -78,6 +78,7 @@ void GameScene::Initialize() {
 
 	selectSEDataHandle_ = audio_->LoadWave("sounds/maou_se_system13.wav");
 	pushSEDataHandle_ = audio_->LoadWave("sounds/maou_se_system11.wav");
+
 }
 
 void GameScene::Update() {
@@ -212,7 +213,6 @@ void GameScene::FiringAfterSelect() {
 				afterSelectState_ = AfterSelectState::FadeOutToRetry;
 				break;
 			case 2:
-				setting_->UpdateBestRecord(rocket_->GetRecord());
 				fade_->Start(Fade::Status::FadeOut, 1.0f);
 				afterSelectState_ = AfterSelectState::FadeOutToTitle;
 				break;
@@ -247,6 +247,7 @@ void GameScene::FiringAfterSelect() {
 	case GameScene::AfterSelectState::FadeOutToTitle:
 		fade_->Update();
 		if (fade_->IsFinished()) {
+			setting_->UpdateBestRecord(rocket_->GetRecord());
 			isFinished_ = true;
 		}
 		break;

@@ -37,6 +37,7 @@ public:
 
 private:
 	WorldTransformEx worldTransform_;
+	KamataEngine::Audio* audio_ = nullptr;
 
 	KamataEngine::Model* model_ = nullptr;
 	KamataEngine::Model* particleModel_ = nullptr;
@@ -61,4 +62,7 @@ private:
 	
 	float rocketWidth = 1.0f; // ロケットの幅
 	float waitingTime_ = 120.0f; // 到達後の待機時間(フレーム)
+
+	uint32_t newRecordSEDataHandle_ = 0;
+	uint32_t newRecordSEVoiceHandle_ = 0;
 };

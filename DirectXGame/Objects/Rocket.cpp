@@ -10,6 +10,8 @@ using namespace KamataEngine;
 using namespace KamataEngine::MathUtility;
 
 void Rocket::Initialize(Model* model, Input* input, Screw* screw, Timer* timer, Setting* setting) {
+	audio_ = Audio::GetInstance();
+
 	assert(model);
 	model_ = model;
 	assert(input);
@@ -31,6 +33,8 @@ void Rocket::Initialize(Model* model, Input* input, Screw* screw, Timer* timer, 
 	screwCount_ = 0;
 	worldTransform_.translation_ = {0.0f, 0.0f, 0.0f};
 	waitingTime_ = 120.0f;
+
+	newRecordSEDataHandle_ = audio_->LoadWave("sounds/sucess2.wav");
 }
 
 void Rocket::Update() { 
@@ -100,6 +104,10 @@ void Rocket::Firing() {
 		waitingTime_--;
 
 	} else if(waitingTime_<=0){
+		if (setting_->bestRecord_ < firingDistance_ && isTimerStart_) {
+    		newRecordSEVoiceHandle_ = audio_->PlayWave(newRecordSEDataHandle_, false, 0.7f);
+		}
+		isTimerStart_ = false;
 		isArrived = true;
 	}
 }
