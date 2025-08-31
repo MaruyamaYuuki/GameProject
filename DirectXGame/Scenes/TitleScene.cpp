@@ -89,10 +89,21 @@ void TitleScene::Update() {
 	Input::GetInstance()->GetJoystickState(0, state);
 	Input::GetInstance()->GetJoystickStatePrevious(0, preState);
 
-	isUpPressed = input->TriggerKey(DIK_UP) || (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP);
-	isDownPressed = input->TriggerKey(DIK_DOWN) || (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN);
-	isRightPressed = input->TriggerKey(DIK_RIGHT) || (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT);
-	isLeftPressed = input->TriggerKey(DIK_LEFT) || (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT);
+    // デッドゾーン（ニュートラル範囲）
+	const int DEADZONE = XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE; // 約7849
+
+	// 左スティックの上下左右を入力として検出
+	bool stickUp = (state.Gamepad.sThumbLY > DEADZONE) && !(preState.Gamepad.sThumbLY > DEADZONE);
+	bool stickDown = (state.Gamepad.sThumbLY < -DEADZONE) && !(preState.Gamepad.sThumbLY < -DEADZONE);
+	bool stickRight = (state.Gamepad.sThumbLX > DEADZONE) && !(preState.Gamepad.sThumbLX > DEADZONE);
+	bool stickLeft = (state.Gamepad.sThumbLX < -DEADZONE) && !(preState.Gamepad.sThumbLX < -DEADZONE);
+
+	// 既存のフラグに統合
+	isUpPressed = input->TriggerKey(DIK_UP) || ((state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP)) || stickUp;
+	isDownPressed = input->TriggerKey(DIK_DOWN) || ((state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)) || stickDown;
+	isRightPressed = input->TriggerKey(DIK_RIGHT) || ((state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)) || stickRight;
+	isLeftPressed = input->TriggerKey(DIK_LEFT) || ((state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT)) || stickLeft;
+
 	isSpacePressed = input->TriggerKey(DIK_SPACE);
 	isAButtonPressed = (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_A);
 

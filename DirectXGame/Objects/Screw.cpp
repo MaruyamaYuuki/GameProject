@@ -5,17 +5,19 @@
 #include <cmath>
 #include "../Timer.h"
 #include <algorithm>
+#include "../Setting.h"
 
 using namespace KamataEngine;
 using namespace KamataEngine::MathUtility;
 
-void Screw::Initialize(Model* model, Input* input, Timer* timer) {
+void Screw::Initialize(Model* model, Input* input, Timer* timer, Setting* setting) {
 	assert(model);
 	model_ = model;
 	assert(input);
 	input_ = input;
 	assert(timer);
 	this->timer_ = timer;
+	this->setting_ = setting;
 
 	audio_ = Audio::GetInstance();
 
@@ -73,7 +75,7 @@ void Screw::ScrewWinding() {
 
 	float deltaAngle = 0.0f; // 角度差を格納する変数
 
-	if (screwType_ == ScrewType::Button) {
+	if (setting_->screwInputType_ == "AButton") {
 		// --- ボタン式の処理 ---
 
 		bool isSpacePressed = input_->TriggerKey(DIK_SPACE);
@@ -92,11 +94,10 @@ void Screw::ScrewWinding() {
 			float delta = rotationSpeed_ * (1.0f / 60.0f); // 1フレームの回転量
 			worldTransform_.rotation_.x += std::clamp(deltaAngle, -delta, delta);
 		}
-	} else if (screwType_ == ScrewType::Joystick) {
-		// --- ジョイスティック式の処理 ---
-
-		float x = static_cast<float>(state.Gamepad.sThumbRX);
-		float y = static_cast<float>(state.Gamepad.sThumbRY);
+	} else if (setting_->screwInputType_ == "Stick") {
+		// --- ジョイスティック式の処理（左スティック） ---
+		float x = static_cast<float>(state.Gamepad.sThumbLX);
+		float y = static_cast<float>(state.Gamepad.sThumbLY);
 
 		// 微小な入力は無視
 		if (std::abs(x) < 10000 && std::abs(y) < 10000)

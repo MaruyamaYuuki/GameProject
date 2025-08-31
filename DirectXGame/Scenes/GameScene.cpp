@@ -48,7 +48,7 @@ void GameScene::Initialize() {
 	timer_->Initialize();
 	// ネジの初期化・生成
 	screw_ = new Screw();
-	screw_->Initialize(modelScrew_, input,timer_);
+	screw_->Initialize(modelScrew_, input,timer_,setting_);
 	// ロケットの初期化・生成
 	rocket_ = new Rocket();
 	rocket_->Initialize(modelRocket_, input, screw_, timer_, setting_);
@@ -177,8 +177,16 @@ switch (afterSelectState_) {
 }
 
 void GameScene::FiringAfterSelect() {
-	bool isRightPressed = input->TriggerKey(DIK_RIGHT) || (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT);
-	bool isLeftPressed = input->TriggerKey(DIK_LEFT) || (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT);
+	// デッドゾーン（ニュートラル範囲）
+	const int DEADZONE = XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE; // 約7849
+
+	// 左スティックの左右を入力として検出
+	bool stickRight = (state.Gamepad.sThumbLX > DEADZONE) && !(preState.Gamepad.sThumbLX > DEADZONE);
+	bool stickLeft = (state.Gamepad.sThumbLX < -DEADZONE) && !(preState.Gamepad.sThumbLX < -DEADZONE);
+
+	bool isRightPressed = input->TriggerKey(DIK_RIGHT) || ((state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)) || stickRight;
+	bool isLeftPressed = input->TriggerKey(DIK_LEFT) || ((state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT)) || stickLeft;
+
 	bool isSpacePressed = input->TriggerKey(DIK_SPACE);
 	bool isAButtonPressed = (state.Gamepad.wButtons & XINPUT_GAMEPAD_A) && !(preState.Gamepad.wButtons & XINPUT_GAMEPAD_A);
 

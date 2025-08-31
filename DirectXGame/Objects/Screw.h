@@ -3,6 +3,7 @@
 #include "../WorldTransformEx.h"
 
 class Timer;
+class Setting;
 class Screw {
 	enum class ScrewType {
 		Button,
@@ -11,7 +12,7 @@ class Screw {
 
 public:
 
-	void Initialize(KamataEngine::Model* model, KamataEngine::Input* input, Timer* timer);
+	void Initialize(KamataEngine::Model* model, KamataEngine::Input* input, Timer* timer, Setting* setting);
 
 	void Update();
 
@@ -42,6 +43,7 @@ private:
 	bool testFlag = false;
 
 	Timer* timer_ = nullptr;
+	Setting* setting_ = nullptr;
 
 	float targetRotationX_ = 0.0f; // 回転目標角（ラジアン）
 	float rotationSpeed_ = 15.0f;   // 回転スピード（ラジアン/秒）
