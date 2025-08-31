@@ -33,6 +33,7 @@ private:
 	WorldTransformEx worldTransform_;
 
 	KamataEngine::Input* input_ = nullptr;
+	KamataEngine::Audio* audio_ = nullptr;
 
 	KamataEngine::Model* model_ = nullptr;
 
@@ -51,4 +52,7 @@ private:
 	ScrewType screwType_ = ScrewType::Button;
 
 	KamataEngine::Vector3 offsetFromRocket_ = {1.0f, 1.0f, 0.0f};
+
+	uint32_t screwSEDataHandle_ = 0;
+	uint32_t screwSEVoiceHandle_ = 0;
 };

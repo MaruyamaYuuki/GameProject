@@ -2,7 +2,6 @@
 #include "KamataEngine.h"
 #include "../WorldTransformEx.h"
 
-
 class Screw;
 class Timer;
 class Setting;
@@ -10,7 +9,7 @@ class Rocket {
 
 public:
 
-	void Initialize(KamataEngine::Model* model, KamataEngine::Input* input, Screw* screw , Timer* timer, Setting* setting);
+	void Initialize(KamataEngine::Model* model, KamataEngine::Input* input, Screw* screw, Timer* timer, Setting* setting);
 
 	void Update();
 
@@ -21,8 +20,6 @@ public:
 	void UpdateOnlyModel();
 
 	void Firing();
-
-	void Move();
 
 	void Reset();
 
@@ -42,6 +39,7 @@ private:
 	WorldTransformEx worldTransform_;
 
 	KamataEngine::Model* model_ = nullptr;
+	KamataEngine::Model* particleModel_ = nullptr;
 
 	KamataEngine::Input* input_ = nullptr;
 

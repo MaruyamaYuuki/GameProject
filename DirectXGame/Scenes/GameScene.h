@@ -40,6 +40,7 @@ private:
 
 	KamataEngine::DirectXCommon* dxCommon = nullptr;
 	KamataEngine::Input* input = nullptr;
+	KamataEngine::Audio* audio_ = nullptr;
 	KamataEngine::Camera camera_;
 
 	KamataEngine::Model* model_ = nullptr;
@@ -78,4 +79,9 @@ private:
 	int selectNum_ = 1;
 
 	AfterSelectState afterSelectState_ = AfterSelectState::None;
+
+	uint32_t selectSEDataHandle_ = 0;
+	uint32_t selectSEVoiceHandle_ = 0;
+	uint32_t pushSEDataHandle_ = 0;
+	uint32_t pushSEVoiceHandle_ = 0;
 };

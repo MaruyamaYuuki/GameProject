@@ -35,6 +35,7 @@ void Rocket::Initialize(Model* model, Input* input, Screw* screw, Timer* timer, 
 
 void Rocket::Update() { 
 	Firing();
+	//particleManager_.Update();
 	DebugText::GetInstance()->ConsolePrintf("FiringDistance : %f\nTimerStart : %d\n", firingDistance_, isTimerStart_);
 
 	worldTransform_.UpdateMatrix(); 
@@ -43,6 +44,7 @@ void Rocket::Update() {
 
 void Rocket::Draw(Camera& camera) { 
 	model_->Draw(worldTransform_, camera); 
+	//particleManager_.Draw(camera);
 }
 
 void Rocket::InitializeOnlyModel(KamataEngine::Model* model) {
@@ -71,8 +73,6 @@ void Rocket::Firing() {
 		velocity_.y = 0;
 
 		timer_->SetTimerState(Timer::State::None);
-
-		//timer_->Reset();
 	}
 
 	if (isFiring_) {
@@ -92,46 +92,16 @@ void Rocket::Firing() {
 			isFiring_ = false;
 			isTimerStart_ = true;
 		}
-		//Move();
+
+        Vector3 pos = worldTransform_.translation_;
+		pos.y -= 1.0f; // ロケット下部
 	}
 	if (waitingTime_ > 0 && isTimerStart_) {
 		waitingTime_--;
+
 	} else if(waitingTime_<=0){
 		isArrived = true;
 	}
-}
-
-void Rocket::Move() {
-	// 左右移動の処理
-	XINPUT_STATE state;
-	ZeroMemory(&state, sizeof(XINPUT_STATE));
-	XInputGetState(0, &state);
-
-	bool isDPadRPress = (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT);
-	bool isDPadLPress = (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT);
-
-    // 左右移動などの処理
-	if (input_->PushKey(DIK_A) || isDPadLPress) {
-		worldTransform_.translation_.x -= velocity_.x;
-	}
-	if (input_->PushKey(DIK_D) || isDPadRPress) {
-		worldTransform_.translation_.x += velocity_.x;
-	}
-
-	// ジョイスティック
-	if (input_->GetJoystickState(0, state)) {
-		float lx = state.Gamepad.sThumbLX;
-		const int DEADZONE = 8000;
-		if (lx < -DEADZONE) {
-			worldTransform_.translation_.x -= velocity_.x;
-		}
-		if (lx > DEADZONE) {
-			worldTransform_.translation_.x += velocity_.x;
-		}
-	}
-
-	// 移動範囲を制限
-	worldTransform_.translation_.x = std::clamp(worldTransform_.translation_.x, -20.0f, 20.0f);
 }
 
 void Rocket::Reset() {

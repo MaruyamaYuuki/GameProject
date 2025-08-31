@@ -27,6 +27,7 @@ GameScene::~GameScene() {
 void GameScene::Initialize() {
 	dxCommon = DirectXCommon::GetInstance();
 	input = Input::GetInstance();
+	audio_ = Audio::GetInstance();
 
 	//camera_.nearZ = 0.05f;
 	camera_.farZ = 50000.0f;
@@ -74,6 +75,9 @@ void GameScene::Initialize() {
 	cameraController_->SetMoveableArea(cameraArea);
 
 	debugCamera_ = new DebugCamera(1280, 720);
+
+	selectSEDataHandle_ = audio_->LoadWave("sounds/maou_se_system13.wav");
+	pushSEDataHandle_ = audio_->LoadWave("sounds/maou_se_system11.wav");
 }
 
 void GameScene::Update() {
@@ -180,6 +184,7 @@ void GameScene::FiringAfterSelect() {
 
 	if (rocket_->IsArrived()) {
 		if (isRightPressed || isLeftPressed) {
+			selectSEVoiceHandle_ = audio_->PlayWave(selectSEDataHandle_, false, 0.5f);
 			if (selectNum_ == 1) {
 				selectNum_ = 2;
 			} else {
@@ -190,6 +195,8 @@ void GameScene::FiringAfterSelect() {
 		ui_->UpdateAfterSelect(selectNum_);
 
 		if (isSpacePressed || isAButtonPressed) {
+			pushSEVoiceHandle_ = audio_->PlayWave(pushSEDataHandle_, false, 0.5f);
+			timer_->StopBGM();
 			switch (selectNum_) {
 			case 1:
 				// リトライ
@@ -226,6 +233,7 @@ void GameScene::FiringAfterSelect() {
 		if (fade_->IsFinished()) {
 			afterSelectState_ = AfterSelectState::None;
 			timer_->SetTimerState(Timer::State::WaitScrew);
+			timer_->PlayWaitCountSE();
 		}
 		break;
 	case GameScene::AfterSelectState::FadeOutToTitle:

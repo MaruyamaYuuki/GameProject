@@ -1,4 +1,5 @@
 #pragma once
+#include "KamataEngine.h"
 
 class Timer {
 public:
@@ -33,6 +34,10 @@ public:
 
 	void SetTimerState(State state) { state_ = state; }
 
+	void StopBGM();
+
+	void PlayWaitCountSE();
+
 private:
 
 	void UpdateWaitScrew();
@@ -42,6 +47,7 @@ private:
 	void UpdateFiring();
 
 private:
+	KamataEngine::Audio* audio_ = nullptr;
 
 	const float deltaTime = 1.0f / 60.0f;
 
@@ -54,4 +60,9 @@ private:
 	FiringState firingState_ = FiringState::Standby;
 
 	State state_ = State::None;
+
+	uint32_t waitSEDataHandle_ = 0;
+	uint32_t waitSEVoiceHandle_ = 0;
+	uint32_t bgmDataHandle_ = 0;
+	uint32_t bgmVoiceHandle_ = 0;
 };

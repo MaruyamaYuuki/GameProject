@@ -45,6 +45,7 @@ private:
 
 	KamataEngine::DirectXCommon* dxCommon = nullptr;
 	KamataEngine::Input* input = nullptr;
+	KamataEngine::Audio* audio_ = nullptr;
 
 	KamataEngine::Camera camera_;
 	float startDistance = -40.0f;
@@ -62,6 +63,13 @@ private:
 	uint32_t textureHandleRule_ = 0;
 	uint32_t textureHandleExit_ = 0;
 	uint32_t textureHandleSetting_ = 0;
+
+	uint32_t bgmDataHandle_ = 0;
+	uint32_t bgmVoiceHandle_ = 0;
+	uint32_t selectSEDataHandle_ = 0;
+	uint32_t selectSEVoiceHandle_ = 0;
+	uint32_t pushSEDataHandle_ = 0;
+	uint32_t pushSEVoiceHandle_ = 0;
 
 	Screw* screw_ = nullptr;
 	Rocket* rocket_ = nullptr;

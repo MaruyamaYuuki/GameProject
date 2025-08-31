@@ -26,6 +26,7 @@ TitleScene::~TitleScene() {
 void TitleScene::Initialize() {
 	dxCommon = DirectXCommon::GetInstance();
 	input = Input::GetInstance();
+	audio_ = Audio::GetInstance();
 
 	camera_.Initialize();
 
@@ -74,6 +75,10 @@ void TitleScene::Initialize() {
 
 	spriteTitle_ = Sprite::Create(textureHandleTitle_, {0.0f, 0.0f});
 	spriteCommands_ = Sprite::Create(textureHandleStart_, {0.0f, 0.0f});
+
+	bgmDataHandle_ = audio_->LoadWave("sounds/titleBGM.wav");
+	selectSEDataHandle_ = audio_->LoadWave("sounds/maou_se_system13.wav");
+	pushSEDataHandle_ = audio_->LoadWave("sounds/maou_se_system11.wav");
 }
 
 void TitleScene::Update() {
@@ -96,6 +101,7 @@ void TitleScene::Update() {
 		fade_->Update();
 		if (fade_->IsFinished()) {
 			fade_->Stop();
+    		bgmVoiceHandle_ = audio_->PlayWave(bgmDataHandle_, true, 0.7f);
 			phase_ = Phase::kMain;
 		}
 		break;
@@ -119,6 +125,7 @@ void TitleScene::Update() {
 	if (isOpenRule_) {
 		if (!justOpened_) {
 			if (isSpacePressed || isAButtonPressed) {
+				pushSEVoiceHandle_ = audio_->PlayWave(pushSEDataHandle_, false, 0.5f);
 				isOpenRule_ = false;
 			}
 		} else {
@@ -225,11 +232,13 @@ void TitleScene::SelectCommand() {
 
 	if (!isMove_ && !isOpenRule_ && !isOpenSetting_) {
     	if (isUpPressed) {
+			selectSEVoiceHandle_ = audio_->PlayWave(selectSEDataHandle_, false, 0.5f);
     		commandNum_--;
     		if (commandNum_ < 1) {
     			commandNum_ = 3;
     		}
     	} else if (isDownPressed) {
+			selectSEVoiceHandle_ = audio_->PlayWave(selectSEDataHandle_, false, 0.5f);
     		commandNum_++;
     		if (commandNum_ > 3) {
     			commandNum_ = 1;
@@ -237,6 +246,7 @@ void TitleScene::SelectCommand() {
     	}
 
     	if (isRightPressed || isLeftPressed) {
+			selectSEVoiceHandle_ = audio_->PlayWave(selectSEDataHandle_, false, 0.5f);
     		if (!isSettingChoice_) {
     			isSettingChoice_ = true;
     		} else {
@@ -246,9 +256,11 @@ void TitleScene::SelectCommand() {
     	}
 
     	if (isSpacePressed || isAButtonPressed) {
+			pushSEVoiceHandle_ = audio_->PlayWave(pushSEDataHandle_, false, 0.5f);
     		if (!isSettingChoice_) {
     			switch (commandNum_) {
     			case 1: // Start
+					audio_->StopWave(bgmVoiceHandle_);
     				isMove_ = true;
     				break;
     			case 2: // Rule
@@ -273,6 +285,7 @@ void TitleScene::SetGamePadConfig() {
         ui_->UpdateGamePadConfig();
 
     	if (isLeftPressed || isRightPressed) {
+			selectSEVoiceHandle_ = audio_->PlayWave(selectSEDataHandle_, false, 0.5f);
     		if (setting_->screwInputType_ == "AButton") {
     			setting_->screwInputType_ = "Stick";
     		} else if (setting_->screwInputType_ == "Stick") {
@@ -288,6 +301,7 @@ void TitleScene::SetGamePadConfig() {
  
         if (!justOpened_) {
 			if (isSpacePressed || isAButtonPressed) {
+				pushSEVoiceHandle_ = audio_->PlayWave(pushSEDataHandle_, false, 0.5f);
 				isOpenSetting_ = false;
 			}
 		} else {

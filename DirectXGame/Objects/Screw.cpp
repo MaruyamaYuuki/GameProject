@@ -17,6 +17,8 @@ void Screw::Initialize(Model* model, Input* input, Timer* timer) {
 	assert(timer);
 	this->timer_ = timer;
 
+	audio_ = Audio::GetInstance();
+
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = offsetFromRocket_;
 
@@ -25,6 +27,8 @@ void Screw::Initialize(Model* model, Input* input, Timer* timer) {
 	worldTransform_.rotation_.x = 0.0f;
 	accumulatedAngle_ = 0.0f;
 	previousStickAngle_ = 0.0f;
+
+	screwSEDataHandle_ = audio_->LoadWave("sounds/screwSE.wav");
 }
 
 void Screw::Update() {
@@ -78,6 +82,7 @@ void Screw::ScrewWinding() {
 		if (isSpacePressed || isAButtonPressed) {
 			energy_++;
 			targetRotationX_ += std::numbers::pi_v<float>; // 180度ずつ回転
+			screwSEVoiceHandle_ = audio_->PlayWave(screwSEDataHandle_, false);
 		}
 
 		// 回転差を算出してスムーズに追従させる
@@ -117,6 +122,7 @@ void Screw::ScrewWinding() {
 			int steps = static_cast<int>(accumulatedAngle_ / stepAngle);
 			energy_ += std::abs(steps);
 			accumulatedAngle_ -= steps * stepAngle;
+			screwSEVoiceHandle_ = audio_->PlayWave(screwSEDataHandle_, false);
 		}
 
 		// ネジを回転（視覚エフェクト）
