@@ -5,7 +5,7 @@ using namespace KamataEngine::MathUtility;
 
 // Scale, Rotation, Tranlate 行列から World行列を計算
 // そして定数バッファへの転送も行う
-void WorldTransformEx::UpDateMatrix() {
+void WorldTransformEx::UpdateMatrix() {
 	// World変換行列を計算し、matWorld_ に格納する
 	matWorld_ = MakeAffinMatrix();
 	// 定数バッファへ転送する
