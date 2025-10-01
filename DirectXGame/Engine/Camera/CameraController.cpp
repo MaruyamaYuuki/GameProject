@@ -1,6 +1,6 @@
 #define NOMINMAX
 #include "CameraController.h"
-#include "Objects/Rocket.h"
+#include "../../App/Objects/Rocket.h"
 #include <algorithm>
 
 using namespace KamataEngine;

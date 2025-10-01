@@ -1,6 +1,6 @@
 #pragma once
 #include "KamataEngine.h"
-#include "../WorldTransformEx.h"
+#include "../../Engine/Core/WorldTransformEx.h"
 
 class Screw;
 class Timer;

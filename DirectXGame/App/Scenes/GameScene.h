@@ -1,14 +1,14 @@
 #pragma once
 #include "KamataEngine.h"
-#include "../Timer.h"
 #include "../Objects/Screw.h"
 #include "../Objects/Rocket.h"
-#include "../CameraController.h"
 #include "../Objects/Skydome.h"
 #include "../Objects/Field.h"
-#include "../UI.h"
-#include "../Setting.h"
-#include "../Fade.h"
+#include "../../Engine/Camera/CameraController.h"
+#include "../../Engine/Visual/UI.h"
+#include "../../Engine/Visual/Fade.h"
+#include "../../Engine/Utility/Setting.h"
+#include "../../Engine/Utility/Timer.h"
 
 class GameScene {
 public:
