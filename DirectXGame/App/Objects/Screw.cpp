@@ -3,9 +3,9 @@
 #include <cassert>
 #include <numbers>
 #include <cmath>
-#include "../Timer.h"
 #include <algorithm>
-#include "../Setting.h"
+#include "../../Engine/Utility/Timer.h"
+#include "../../Engine/Utility/Setting.h"
 
 using namespace KamataEngine;
 using namespace KamataEngine::MathUtility;

@@ -16,46 +16,70 @@
     <Filter Include="シェーダー ファイル">
       <UniqueIdentifier>{718c7f4c-fc51-40ad-a221-b9456a7a1a3c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="App">
+      <UniqueIdentifier>{e1d88140-fd95-4b4f-abcd-9f822ae4a407}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\Objects">
+      <UniqueIdentifier>{9ea3ae80-81e5-453b-a76d-14f9b7271be5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\Scenes">
+      <UniqueIdentifier>{362e2d85-594a-4400-bcf5-e09579f7a4ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{af3ea330-32dd-46fc-9b1e-85ab15aba120}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Visual">
+      <UniqueIdentifier>{2691fb10-9008-4c75-81a3-4ea93dc81a89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Utility">
+      <UniqueIdentifier>{f8fb24c6-6987-4eeb-9cbc-791a28f703aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Core">
+      <UniqueIdentifier>{2cad8d0a-0782-4184-9357-e9c5cbb71b19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Camera">
+      <UniqueIdentifier>{2e0d77d1-27fc-42d4-bfe3-a4268bf12252}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Engine\Camera\CameraController.cpp">
+      <Filter>Engine\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Scenes\GameScene.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="App\Objects\Rocket.cpp">
+      <Filter>App\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\Rocket.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="App\Objects\Screw.cpp">
+      <Filter>App\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="WorldTransformEx.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="App\Objects\Skydome.cpp">
+      <Filter>App\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\Screw.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="App\Objects\Field.cpp">
+      <Filter>App\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="App\Scenes\GameScene.cpp">
+      <Filter>App\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="CameraController.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="App\Scenes\TitleScene.cpp">
+      <Filter>App\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Scenes\TitleScene.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Engine\Utility\Setting.cpp">
+      <Filter>Engine\Utility</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\Skydome.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Engine\Core\main.cpp">
+      <Filter>Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\Field.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Engine\Core\WorldTransformEx.cpp">
+      <Filter>Engine\Core</Filter>
     </ClCompile>
-    <ClCompile Include="UI.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Engine\Visual\Fade.cpp">
+      <Filter>Engine\Visual</Filter>
     </ClCompile>
-    <ClCompile Include="Setting.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Engine\Visual\UI.cpp">
+      <Filter>Engine\Visual</Filter>
     </ClCompile>
-    <ClCompile Include="Fade.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Engine\Utility\Timer.cpp">
+      <Filter>Engine\Utility</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -108,41 +132,41 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Scenes\GameScene.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\Camera\CameraController.h">
+      <Filter>Engine\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Rocket.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="App\Objects\Field.h">
+      <Filter>App\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="WorldTransformEx.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="App\Objects\Rocket.h">
+      <Filter>App\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Screw.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="App\Objects\Skydome.h">
+      <Filter>App\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="App\Objects\Screw.h">
+      <Filter>App\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="CameraController.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="App\Scenes\GameScene.h">
+      <Filter>App\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\TitleScene.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="App\Scenes\TitleScene.h">
+      <Filter>App\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Skydome.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\Utility\Setting.h">
+      <Filter>Engine\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="Objects\Field.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\Core\WorldTransformEx.h">
+      <Filter>Engine\Core</Filter>
     </ClInclude>
-    <ClInclude Include="UI.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\Visual\Fade.h">
+      <Filter>Engine\Visual</Filter>
     </ClInclude>
-    <ClInclude Include="Setting.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\Visual\UI.h">
+      <Filter>Engine\Visual</Filter>
     </ClInclude>
-    <ClInclude Include="Fade.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Engine\Utility\Timer.h">
+      <Filter>Engine\Utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

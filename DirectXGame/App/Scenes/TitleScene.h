@@ -4,9 +4,9 @@
 #include "../Objects/Screw.h"
 #include "../Objects/Skydome.h"
 #include "../Objects/Field.h"
-#include "../Setting.h"
-#include "../UI.h"
-#include "../Fade.h"
+#include "../../Engine/Utility/Setting.h"
+#include "../../Engine/Visual/UI.h"
+#include "../../Engine/Visual/Fade.h"
 
 class TitleScene {
 public:

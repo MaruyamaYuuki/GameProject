@@ -1,9 +1,9 @@
 #include "UI.h"
 #define MNOMINMAX
 #include <algorithm>
-#include "Timer.h"
-#include "Objects/Rocket.h"
-#include "Setting.h"
+#include "../../App/Objects/Rocket.h"
+#include "../Utility/Setting.h"
+#include "../Utility/Timer.h"
 
 using namespace KamataEngine;
 
